@@ -2,9 +2,9 @@ Categories:
   - Multimedia
   - Audio
 License: GPL-3.0-only
-SourceCode: https://github.com/apex-player/apex-music-player
-IssueTracker: https://github.com/apex-player/apex-music-player/issues
-Changelog: https://github.com/apex-player/apex-music-player/releases
+SourceCode: https://github.com/Yaromir-Anokhin/apex-music-player
+IssueTracker: https://github.com/Yaromir-Anokhin/apex-music-player/issues
+Changelog: https://github.com/Yaromir-Anokhin/apex-music-player/releases
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
@@ -25,7 +25,7 @@ Description: |-
   * 100% Free & Open Source: No ads, no telemetry, no tracking, no proprietary Google Play Services required.
 
 RepoType: git
-Repo: https://github.com/apex-player/apex-music-player.git
+Repo: https://github.com/Yaromir-Anokhin/apex-music-player.git
 
 Builds:
   - versionName: 1.1.0

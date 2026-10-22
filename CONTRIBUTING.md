@@ -16,7 +16,7 @@ This project is open-source and welcoming to everyone. Please be respectful, con
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/apex-player/apex-music-player.git
+   git clone https://github.com/Yaromir-Anokhin/apex-music-player.git
    cd apex-music-player
    ```
 

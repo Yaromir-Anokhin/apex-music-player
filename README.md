@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/apex-player/apex-music-player/actions"><img src="https://img.shields.io/github/actions/workflow/status/apex-player/apex-music-player/build.yml?branch=main&label=CI%20Build&logo=github" alt="CI Build"></a>
+  <a href="https://github.com/Yaromir-Anokhin/apex-music-player/actions"><img src="https://img.shields.io/github/actions/workflow/status/Yaromir-Anokhin/apex-music-player/build.yml?branch=main&label=CI%20Build&logo=github" alt="CI Build"></a>
   <a href="https://f-droid.org"><img src="https://img.shields.io/badge/F--Droid-Ready-blue?logo=f-droid" alt="F-Droid Ready"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-green.svg" alt="License: GPL-3.0"></a>
   <img src="https://img.shields.io/badge/Android-5.0%20to%2015%2B%20(Universal)-brightgreen?logo=android" alt="Android 5.0 to 15+">
@@ -62,7 +62,7 @@
 #### Steps
 ```bash
 # 1. Clone repository
-git clone https://github.com/apex-player/apex-music-player.git
+git clone https://github.com/Yaromir-Anokhin/apex-music-player.git
 cd apex-music-player
 
 # 2. Build web bundle
