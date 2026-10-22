@@ -1,0 +1,54 @@
+Categories:
+  - Multimedia
+  - Audio
+License: GPL-3.0-only
+SourceCode: https://github.com/apex-player/apex-music-player
+IssueTracker: https://github.com/apex-player/apex-music-player/issues
+Changelog: https://github.com/apex-player/apex-music-player/releases
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+
+Summary: Modern music player with YouTube audio & cover art downloader, custom playlists, and background playback
+Description: |-
+  Apex Music Player is a modern, lightweight, privacy-focused open-source audio player for Android.
+  It is engineered specifically for reliable background playback, media session controls, headset hook navigation, and seamless YouTube audio downloading with embedded high-resolution cover art.
+
+  Key Features:
+  * Dual Android Compatibility: Optimized for Android 10 (Huawei P20 Pro / EMUI 10) and Android 15 (Redmi / Xiaomi / HyperOS).
+  * Direct YouTube Search & Download: Search videos and download high-bitrate audio with album art directly to local storage via open-source NewPipeExtractor.
+  * Custom Playlists System: Create personal playlists with custom emoji badges, reorder, sort, and organize tracks effortlessly.
+  * Background Playback: Foreground Service with notification shade controls, lock screen artwork, and full headset button support.
+  * Persistent State: Never lose your playback queue, track position, or favorite list after task dismissal or low-memory kill.
+  * 10-Band Equalizer & Visualizer: Hardware-accelerated audio effects, bass boost, and animated 3D audio reactive spectrum.
+  * Convenience Controls: Playback speed (0.5x - 2.0x), ±10s seek jump buttons, instant search filter, and track sorting.
+  * 100% Free & Open Source: No ads, no telemetry, no tracking, no proprietary Google Play Services required.
+
+RepoType: git
+Repo: https://github.com/apex-player/apex-music-player.git
+
+Builds:
+  - versionName: 1.1.0-redmiA15
+    versionCode: 2
+    commit: v1.1.0
+    subdir: app
+    gradle:
+      - redmiRelease
+    prebuild:
+      - npm ci || npm install
+      - npm run build
+
+  - versionName: 1.1.0-huaweiP20Pro
+    versionCode: 2
+    commit: v1.1.0
+    subdir: app
+    gradle:
+      - huaweiRelease
+    prebuild:
+      - npm ci || npm install
+      - npm run build
+
+ArchivePolicy: 3 versions
+AutoUpdate:
+  EnforceVersion: true
+  Commit: v%v

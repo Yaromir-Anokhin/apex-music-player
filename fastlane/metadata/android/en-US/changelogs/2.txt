@@ -1,0 +1,7 @@
+- Custom playlists: create, rename, delete playlists with custom emoji icons.
+- Add/remove tracks to custom playlists and quick favorite toggle.
+- Playback convenience: variable playback speed (0.5x - 2.0x) and ±10s seek jump buttons.
+- Search filter and playlist sorting by title or artist.
+- Full Android 15 (Redmi / HyperOS) and Android 10 (Huawei P20 Pro) compatibility.
+- Direct YouTube audio & cover art downloader via NewPipeExtractor.
+- Foreground service lockscreen & notification shade media controls with headset button support.

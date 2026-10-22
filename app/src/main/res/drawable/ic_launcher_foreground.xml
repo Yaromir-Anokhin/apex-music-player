@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer Glow Disc -->
+    <path
+        android:fillColor="#161826"
+        android:pathData="M54,18 A36,36 0 1,0 54,90 A36,36 0 1,0 54,18 Z" />
+    <path
+        android:fillColor="#0D0F18"
+        android:pathData="M54,26 A28,28 0 1,0 54,82 A28,28 0 1,0 54,26 Z" />
+    <!-- Gradient Cyan Accent Vinyl Ring -->
+    <path
+        android:fillColor="#00F2FE"
+        android:pathData="M54,34 A20,20 0 1,0 54,74 A20,20 0 1,0 54,34 Z" />
+    <!-- Center Hole -->
+    <path
+        android:fillColor="#0A0A0E"
+        android:pathData="M54,48 A6,6 0 1,0 54,60 A6,6 0 1,0 54,48 Z" />
+    <!-- Modern Music Note Motif -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M60,40 L60,56 A4,4 0 1,1 56,52 L56,44 L66,42 L66,54 A4,4 0 1,1 62,50 L62,40 Z" />
+</vector>

@@ -1,0 +1,11 @@
+Apex Music Player is a powerful, lightweight, and privacy-focused open-source music player for Android, tailored for reliable background playback, custom playlists, and direct YouTube audio downloads with cover art.
+
+FEATURES:
+• Dual Android Optimization: Flawless performance on legacy Android 10 (Huawei P20 Pro / EMUI 10) and modern Android 15 (Redmi / Xiaomi / HyperOS).
+• YouTube Downloader: Search YouTube directly inside the app and download high-quality audio streams along with embedded album cover artwork.
+• Custom Playlists System: Create unlimited custom playlists with customizable emoji badges. Add tracks, reorder, sort by artist or title, and manage favorites.
+• Uninterrupted Background Playback: Built on an Android Foreground Service with lock-screen controls, media notification shade actions (Play, Pause, Next, Prev), and headset button support (single, double, and triple click).
+• State Preservation: Never lose your playback queue or current track timestamp when Android clears memory. Playback state is automatically saved and restored seamlessly.
+• Convenience Controls: Playback speed control (0.5x, 0.75x, 1.0x, 1.25x, 1.5x, 2.0x), ±10-second fast seek jump buttons, instant search filter, and custom sorting.
+• Equalizer & Visualizer: 10-band equalizer presets with real-time 3D audio-reactive spectrum visualizations.
+• 100% Free & Open Source: No advertisements, no trackers, no Google Play Services dependency. Licensed under GNU GPL v3.

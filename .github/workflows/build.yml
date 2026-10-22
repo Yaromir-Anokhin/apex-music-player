@@ -1,0 +1,58 @@
+name: CI - Build & Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build APKs (Huawei & Redmi)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install web dependencies
+        run: npm ci || npm install
+
+      - name: Build web application (Vite)
+        run: npm run build
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Huawei & Redmi Release APKs
+        run: ./gradlew assembleHuaweiRelease assembleRedmiRelease
+
+      - name: Upload Huawei P20 Pro APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ApexMusic-Player-HuaweiP20Pro-release
+          path: app/build/outputs/apk/huawei/release/*.apk
+          retention-days: 14
+
+      - name: Upload Redmi Android 15 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ApexMusic-Player-RedmiAndroid15-release
+          path: app/build/outputs/apk/redmi/release/*.apk
+          retention-days: 14
