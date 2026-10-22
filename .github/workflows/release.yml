@@ -42,12 +42,13 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build Huawei & Redmi Release APKs
-        run: ./gradlew assembleHuaweiRelease assembleRedmiRelease
+      - name: Build Universal, Huawei & Redmi Release APKs
+        run: ./gradlew assembleUniversalRelease assembleHuaweiRelease assembleRedmiRelease
 
       - name: Collect Release APKs
         run: |
           mkdir -p release-artifacts
+          cp app/build/outputs/apk/universal/release/*.apk release-artifacts/
           cp app/build/outputs/apk/huawei/release/*.apk release-artifacts/
           cp app/build/outputs/apk/redmi/release/*.apk release-artifacts/
           ls -la release-artifacts/

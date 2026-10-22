@@ -3,6 +3,7 @@ chcp 65001 >nul
 title Apex Music Player - One-Click USB Installer
 cd /d "%~dp0"
 set ADB=%LOCALAPPDATA%\Android\Sdk\platform-tools\adb.exe
+set APK_UNIVERSAL=%~dp0ApexMusic-Player-Universal.apk
 set APK_HUAWEI=%~dp0ApexMusic-Player-HuaweiP20Pro.apk
 set APK_REDMI=%~dp0ApexMusic-Player-RedmiAndroid15.apk
 
@@ -14,7 +15,8 @@ if not exist "%ADB%" (
 
 echo ========================================================
 echo   Apex Music Player - Автоматическая установка на телефон
-echo   Huawei P20 Pro (Android 10)  /  Redmi (Android 15)
+echo   Поддержка ВСЕХ версий Android (5.0 – 15+)
+echo   Universal / Huawei P20 Pro / Redmi / Samsung / Pixel
 echo ========================================================
 echo Проверка подключенных устройств...
 "%ADB%" devices
@@ -31,9 +33,9 @@ echo.
 echo [!] Устройство не подключено по USB.
 echo Вы можете:
 echo 1) Подключить телефон по USB и включить "Отладка по USB"
-echo    (на Redmi также включите "Установка через USB" в настройках разработчика)
+echo    (на Xiaomi/Redmi также включите "Установка через USB" в настройках разработчика)
 echo 2) Либо запустить 'start_phone_transfer.bat' и скачать по Wi-Fi
-echo 3) Либо просто скопировать нужный APK на телефон
+echo 3) Либо просто скопировать 'ApexMusic-Player-Universal.apk' на телефон
 pause
 exit /b 0
 
@@ -46,9 +48,11 @@ for /f "delims=" %%s in ('"%ADB%" -s %DEV% shell getprop ro.build.version.sdk') 
 echo.
 echo [INFO] Найдено устройство: %DEV%  (%MANUF%, API %SDK%)
 
-set APK=%APK_HUAWEI%
+set APK=%APK_UNIVERSAL%
+echo %MANUF% | findstr /i "huawei" >nul && set APK=%APK_HUAWEI%
 echo %MANUF% | findstr /i "xiaomi redmi poco" >nul && set APK=%APK_REDMI%
-if %SDK% GEQ 33 set APK=%APK_REDMI%
+
+if not exist "%APK%" set APK=%APK_UNIVERSAL%
 
 echo [INFO] Установка %APK%...
 "%ADB%" -s %DEV% install -r -d "%APK%"

@@ -17,8 +17,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   - Real-time search filter in tracks list.
   - Track sorting options: default order, alphabetical by title, alphabetical by artist.
   - "Play All" button for the currently active playlist.
+- **Universal Release for ALL Androids**:
+  - Added `universal` productFlavor (`minSdk 21`, `targetSdk 35`) supporting Android 5.0 Lollipop through Android 15+.
+  - Fully compatible with Samsung Galaxy, Google Pixel, Xiaomi / Redmi, Huawei, OnePlus, Motorola, and all Android devices.
+  - Generates `ApexMusic-Player-Universal.apk`.
 - **F-Droid & GitHub Deployment**:
-  - Official F-Droid metadata recipe `metadata/com.apex.meshplayer.yml`.
+  - Official F-Droid metadata recipe `metadata/com.apex.meshplayer.yml` targeting `universalRelease`.
   - Fastlane localized metadata in English (`en-US`) and Russian (`ru-RU`).
   - Automated GitHub Actions CI workflow for pull requests and main branch (`build.yml`).
   - Automated GitHub Actions Release workflow for tagged releases (`release.yml`).
@@ -30,7 +34,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   - Custom playlists, favorites, sort mode, playback speed, and active collection filter are persisted in LocalStorage.
   - Blob URLs sanitized on state save to prevent dead media references across app restarts.
   - Android back button closes open modal sheets before navigating between views.
-- **Dual Flavor Support**:
+- **Flavor & Architecture Support**:
+  - Universal build for all Android devices (`minSdk 21`, `targetSdk 35`).
   - Huawei P20 Pro flavor (`targetSdk 34`, Android 10 / EMUI 10).
   - Redmi flavor (`targetSdk 35`, Android 15 / HyperOS).
 

@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build APKs (Huawei & Redmi)
+    name: Build APKs (Universal, Huawei & Redmi)
     runs-on: ubuntu-latest
 
     steps:
@@ -40,8 +40,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build Huawei & Redmi Release APKs
-        run: ./gradlew assembleHuaweiRelease assembleRedmiRelease
+      - name: Build Universal, Huawei & Redmi Release APKs
+        run: ./gradlew assembleUniversalRelease assembleHuaweiRelease assembleRedmiRelease
+
+      - name: Upload Universal APK (All Androids)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ApexMusic-Player-Universal-release
+          path: app/build/outputs/apk/universal/release/*.apk
+          retention-days: 14
 
       - name: Upload Huawei P20 Pro APK
         uses: actions/upload-artifact@v4

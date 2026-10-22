@@ -15,6 +15,7 @@ const WEB_DIR = path.join(__dirname, 'app', 'src', 'main', 'assets', 'web');
 const DOWNLOADS_DIR = path.join(__dirname, 'downloads');
 const APK_PATH = path.join(__dirname, 'ApexMusic-Player-HuaweiP20Pro.apk');
 const APK_REDMI_PATH = path.join(__dirname, 'ApexMusic-Player-RedmiAndroid15.apk');
+const APK_UNIVERSAL_PATH = path.join(__dirname, 'ApexMusic-Player-Universal.apk');
 const QR_IMG_PATH = path.join(__dirname, 'qr_code.png');
 const PYTHON_PATH = 'C:\\Users\\Yarom\\AppData\\Local\\Programs\\Python\\Python311\\python.exe';
 
@@ -278,6 +279,24 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // Serve Universal APK (All Androids)
+  if (pathname === '/ApexMusic-Player-Universal.apk' || pathname === '/universal') {
+    if (fs.existsSync(APK_UNIVERSAL_PATH)) {
+      const stat = fs.statSync(APK_UNIVERSAL_PATH);
+      res.writeHead(200, {
+        'Content-Type': 'application/vnd.android.package-archive',
+        'Content-Disposition': 'attachment; filename="ApexMusic-Player-Universal.apk"',
+        'Content-Length': stat.size
+      });
+      fs.createReadStream(APK_UNIVERSAL_PATH).pipe(res);
+      console.log(`[APK] Загрузка Universal APK на устройство: ${req.socket.remoteAddress}`);
+    } else {
+      res.writeHead(404);
+      res.end('Universal APK file not found');
+    }
+    return;
+  }
+
   // Serve Redmi / Android 15 APK
   if (pathname === '/ApexMusic-Player-RedmiAndroid15.apk' || pathname === '/redmi') {
     if (fs.existsSync(APK_REDMI_PATH)) {
@@ -336,11 +355,14 @@ const server = http.createServer(async (req, res) => {
       let content = fs.readFileSync(filePath, 'utf8');
       const banner = `
         <div style="position:fixed;top:10px;right:14px;z-index:99999;pointer-events:auto;display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
-          <a href="/ApexMusic-Player-HuaweiP20Pro.apk" download style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#ff0033,#7f00ff);color:#fff;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;box-shadow:0 4px 15px rgba(255,0,51,0.4);">
-            📥 APK для Huawei P20 Pro (Android 10)
+          <a href="/ApexMusic-Player-Universal.apk" download style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#00f5a0,#00d9f5);color:#07070a;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:800;text-decoration:none;box-shadow:0 4px 15px rgba(0,245,160,0.5);">
+            🌟 Скачать для всех Android (5.0 – 15+)
           </a>
-          <a href="/ApexMusic-Player-RedmiAndroid15.apk" download style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#ff6a00,#00c6ff);color:#fff;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;box-shadow:0 4px 15px rgba(255,106,0,0.4);">
-            📥 APK для Redmi (Android 15)
+          <a href="/ApexMusic-Player-HuaweiP20Pro.apk" download style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#ff0033,#7f00ff);color:#fff;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;text-decoration:none;box-shadow:0 4px 15px rgba(255,0,51,0.3);">
+            📥 Для Huawei P20 Pro (Android 10)
+          </a>
+          <a href="/ApexMusic-Player-RedmiAndroid15.apk" download style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#ff6a00,#00c6ff);color:#fff;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;text-decoration:none;box-shadow:0 4px 15px rgba(255,106,0,0.3);">
+            📥 Для Redmi / Xiaomi (Android 15)
           </a>
         </div>
       `;
@@ -360,18 +382,17 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log('\n' + '='.repeat(64));
-  console.log('  🎵 APEX MUSIC & YOUTUBE PLAYER — ДЛЯ ANDROID 10 (HUAWEI P20 PRO)');
+  console.log('  🎵 APEX MUSIC & YOUTUBE PLAYER — ДЛЯ ВСЕХ ВЕРСИЙ ANDROID');
   console.log('='.repeat(64));
-  console.log(`\n📲 Наведите камеру Huawei P20 Pro на QR-код для установки:\n`);
+  console.log(`\n📲 Наведите камеру любого телефона на QR-код для установки:\n`);
 
   qrcodeTerminal.generate(downloadUrl, { small: true });
 
-  console.log(`\n🔗 Прямая ссылка на скачивание APK:`);
-  console.log(`   Huawei P20 Pro: ${downloadUrl}`);
-  console.log(`   Redmi Android 15: http://${localIp}:${PORT}/ApexMusic-Player-RedmiAndroid15.apk`);
+  console.log(`\n🔗 Прямые ссылки на скачивание APK:`);
+  console.log(`   🌟 Для всех Android (Universal): http://${localIp}:${PORT}/ApexMusic-Player-Universal.apk`);
+  console.log(`   📱 Huawei P20 Pro (Android 10): ${downloadUrl}`);
+  console.log(`   📱 Redmi Android 15: http://${localIp}:${PORT}/ApexMusic-Player-RedmiAndroid15.apk`);
   console.log(`\n🌐 Веб-версия плеера (в браузере телефона без установки):`);
   console.log(`   ${webUrl}`);
-  console.log(`\n📁 Готовый файл APK:`);
-  console.log(`   ${APK_PATH}`);
   console.log('='.repeat(64) + '\n');
 });

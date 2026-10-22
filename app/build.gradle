@@ -21,13 +21,20 @@ android {
     //   redmi  -> Redmi / Xiaomi, Android 15 / HyperOS   (ApexMusic-Player-RedmiAndroid15.apk)
     flavorDimensions = ["device"]
     productFlavors {
+        universal {
+            dimension "device"
+            minSdk 21
+            targetSdk 35
+        }
         huawei {
             dimension "device"
+            minSdk 26
             targetSdk 34
             versionNameSuffix "-huaweiP20Pro"
         }
         redmi {
             dimension "device"
+            minSdk 26
             targetSdk 35
             versionNameSuffix "-redmiA15"
         }
@@ -47,8 +54,13 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            def device = variant.flavorName == "redmi" ? "RedmiAndroid15" : "HuaweiP20Pro"
-            outputFileName = "ApexMusic-Player-${device}-${variant.buildType.name}.apk"
+            def deviceName = "Universal"
+            if (variant.flavorName == "redmi") {
+                deviceName = "RedmiAndroid15"
+            } else if (variant.flavorName == "huawei") {
+                deviceName = "HuaweiP20Pro"
+            }
+            outputFileName = "ApexMusic-Player-${deviceName}-${variant.buildType.name}.apk"
         }
     }
 
