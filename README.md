@@ -19,9 +19,8 @@
 
 ---
 
-## 🌍 Languages / Языки
+## 🌍 Languages
 - [English](#-english)
-- [Русский](#-русский)
 
 ---
 
