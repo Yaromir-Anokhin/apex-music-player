@@ -90,7 +90,7 @@ public class YouTubeExtractorHelper {
                 if (trimmed.isEmpty()) {
                     JSONObject err = new JSONObject();
                     err.put("success", false);
-                    err.put("error", "Пустой поисковый запрос");
+                    err.put("error", "Empty search query");
                     callback.onResult(err.toString());
                     return;
                 }
@@ -113,7 +113,7 @@ public class YouTubeExtractorHelper {
                 try {
                     JSONObject err = new JSONObject();
                     err.put("success", false);
-                    err.put("error", "Ошибка поиска: " + (t.getMessage() != null ? t.getMessage() : "Неизвестная ошибка"));
+                    err.put("error", "Search error: " + (t.getMessage() != null ? t.getMessage() : "Unknown error"));
                     callback.onResult(err.toString());
                 } catch (Throwable ignored) {}
             }
@@ -186,7 +186,7 @@ public class YouTubeExtractorHelper {
             log("e", "resolveVideoDirect failed: " + t.getMessage(), t);
             try {
                 res.put("success", false);
-                res.put("error", "Не удалось загрузить данные видео: " + t.getMessage());
+                res.put("error", "Failed to load video details: " + t.getMessage());
             } catch (Throwable ignored) {}
             return res;
         }
@@ -202,13 +202,13 @@ public class YouTubeExtractorHelper {
             Request req = new Request.Builder()
                     .url(searchUrl)
                     .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-                    .header("Accept-Language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7")
+                    .header("Accept-Language", "en-US,en;q=0.9")
                     .build();
 
             try (Response response = sHttpClient.newCall(req).execute()) {
                 if (!response.isSuccessful() || response.body() == null) {
                     res.put("success", false);
-                    res.put("error", "Ошибка поиска YouTube: HTTP " + response.code());
+                    res.put("error", "YouTube search error: HTTP " + response.code());
                     return res;
                 }
 
@@ -219,7 +219,7 @@ public class YouTubeExtractorHelper {
 
                 if (idx == -1) {
                     res.put("success", false);
-                    res.put("error", "Не удалось найти данные поиска YouTube");
+                    res.put("error", "Unable to locate YouTube search results");
                     return res;
                 }
 
@@ -232,7 +232,7 @@ public class YouTubeExtractorHelper {
 
                 if (startBrace == -1 || endSemicolon == -1 || endSemicolon <= startBrace) {
                     res.put("success", false);
-                    res.put("error", "Не удалось прочитать результаты поиска YouTube");
+                    res.put("error", "Unable to parse YouTube search results");
                     return res;
                 }
 
@@ -304,7 +304,7 @@ public class YouTubeExtractorHelper {
 
                 if (items.length() == 0) {
                     res.put("success", false);
-                    res.put("error", "По вашему запросу треков не найдено");
+                    res.put("error", "No tracks found for your search");
                     return res;
                 }
 
@@ -317,7 +317,7 @@ public class YouTubeExtractorHelper {
             log("e", "searchVideosDirect error: " + t.getMessage(), t);
             try {
                 res.put("success", false);
-                res.put("error", "Ошибка поиска: " + t.getMessage());
+                res.put("error", "Search error: " + t.getMessage());
             } catch (Throwable ignored) {}
             return res;
         }
@@ -485,7 +485,7 @@ public class YouTubeExtractorHelper {
             try {
                 JSONObject err = new JSONObject();
                 err.put("success", false);
-                err.put("error", "Серверы конвертации временно недоступны. Повторите попытку.");
+                err.put("error", "Audio conversion servers temporarily busy. Please try again.");
                 callback.onResult(err.toString());
             } catch (Throwable ignored) {}
         });
@@ -501,7 +501,7 @@ public class YouTubeExtractorHelper {
                 } else {
                     JSONObject err = new JSONObject();
                     err.put("success", false);
-                    err.put("error", "Неверный адрес видео");
+                    err.put("error", "Invalid video URL");
                     callback.onResult(err.toString());
                 }
             } catch (Throwable t) {
@@ -509,7 +509,7 @@ public class YouTubeExtractorHelper {
                 try {
                     JSONObject err = new JSONObject();
                     err.put("success", false);
-                    err.put("error", "Ошибка: " + t.getMessage());
+                    err.put("error", "Error: " + t.getMessage());
                     callback.onResult(err.toString());
                 } catch (Throwable ignored) {}
             }

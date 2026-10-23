@@ -56,7 +56,7 @@ function callNativeDownloadMp3(videoId, title, artist) {
     setTimeout(() => {
       if (nativeCallbacks.has(callbackId)) {
         nativeCallbacks.delete(callbackId);
-        reject(new Error('Время ожидания конвертации MP3 истекло'));
+        reject(new Error('MP3 conversion timed out'));
       }
     }, 90000);
   });
@@ -76,7 +76,7 @@ function callNativeSearch(query) {
     setTimeout(() => {
       if (nativeCallbacks.has(callbackId)) {
         nativeCallbacks.delete(callbackId);
-        reject(new Error('Время ожидания поиска YouTube истекло'));
+        reject(new Error('YouTube search timed out'));
       }
     }, 30000);
   });
@@ -96,7 +96,7 @@ function callNativeGetAudioStream(url) {
     setTimeout(() => {
       if (nativeCallbacks.has(callbackId)) {
         nativeCallbacks.delete(callbackId);
-        reject(new Error('Время ожидания аудиопотока истекло'));
+        reject(new Error('Audio stream timed out'));
       }
     }, 30000);
   });
@@ -235,9 +235,9 @@ class ApexMusicPlayer {
 
       this.renderPlaylistUI();
       this.saveState();
-      this.showToast('✅ Скачано и добавлено: ' + trackObj.title);
+      this.showToast('✅ Downloaded and added: ' + trackObj.title);
 
-      // Auto-play immediately if user had tapped "Слушать"
+      // Auto-play immediately if user had tapped "Play"
       if (this.pendingPlayTitle) {
         const pTitle = this.pendingPlayTitle.toLowerCase();
         const tTitle = trackMeta.title.toLowerCase();
@@ -248,7 +248,7 @@ class ApexMusicPlayer {
           const playIdx = targetIdx !== -1 ? targetIdx : 0;
           await this.loadTrack(playIdx, true);
           this.switchTab('view-player');
-          this.showToast('▶ Воспроизведение: ' + trackObj.title);
+          this.showToast('▶ Playing: ' + trackObj.title);
         }
       }
     };
@@ -260,7 +260,7 @@ class ApexMusicPlayer {
           const scannedTracks = list.map((item) => ({
             id: 'scanned-' + Math.random().toString(36).substring(2, 9),
             title: item.title,
-            artist: item.artist || 'Телефон',
+            artist: item.artist || 'Device',
             format: item.format || 'MP3',
             url: item.url,
             path: item.path,
@@ -285,7 +285,7 @@ class ApexMusicPlayer {
           }
           this.renderPlaylistUI();
           this.saveState();
-          this.showToast(`Найдено песен на телефоне: ${list.length}`);
+          this.showToast(`Found songs on device: ${list.length}`);
         }
       } catch (e) {
         console.warn('onAndroidLocalFilesScanned error:', e);
@@ -384,7 +384,7 @@ class ApexMusicPlayer {
     const text = document.getElementById('server-status-text');
     if (!pill || !text) return;
     pill.className = 'server-status-pill online';
-    text.textContent = '🟢 Онлайн • Автономно';
+    text.textContent = '🟢 Online • Standalone';
   }
 
   initCanvas() {
@@ -463,7 +463,7 @@ class ApexMusicPlayer {
 
   onYtPlayerError(e) {
     console.warn('YT error:', e);
-    this.showToast('Ошибка воспроизведения YouTube');
+    this.showToast('YouTube playback error');
   }
 
   startYtProgressTracker() {
@@ -1164,7 +1164,7 @@ class ApexMusicPlayer {
   async handleYouTubeSearch(query) {
     query = (query || '').trim();
     if (!query) {
-      this.showToast('Введите ссылку или название трека');
+      this.showToast('Enter track title or YouTube link');
       return;
     }
 
@@ -1174,7 +1174,7 @@ class ApexMusicPlayer {
 
     loader.classList.remove('hidden');
     resultCard.classList.add('hidden');
-    loaderText.textContent = `Поиск на YouTube: "${query}"...`;
+    loaderText.textContent = `Searching YouTube: "${query}"...`;
 
     try {
       if (window.AndroidBridge && typeof window.AndroidBridge.searchYouTube === 'function') {
@@ -1182,14 +1182,14 @@ class ApexMusicPlayer {
         loader.classList.add('hidden');
 
         if (!nativeRes || !nativeRes.success) {
-          throw new Error((nativeRes && nativeRes.error) || 'Ничего не найдено');
+          throw new Error((nativeRes && nativeRes.error) || 'No tracks found');
         }
 
         // Direct URL / Single Video result
         if (nativeRes.id) {
           this.currentYtResult = nativeRes;
           this.displayYouTubeResult(nativeRes);
-          this.showToast('Трек найден! Нажмите Слушать или Скачать');
+          this.showToast('Track found! Tap Play or Download');
           return;
         }
 
@@ -1199,17 +1199,17 @@ class ApexMusicPlayer {
           this.currentYtResult = top;
           this.displayYouTubeResult(top);
           this.renderSearchResults(nativeRes.items);
-          this.showToast(`Найдено треков: ${nativeRes.items.length}`);
+          this.showToast(`Tracks found: ${nativeRes.items.length}`);
           return;
         }
 
-        throw new Error('Ничего не найдено');
+        throw new Error('No tracks found');
       }
 
       // Browser Fallback (if testing in standard browser without AndroidBridge)
       const videoId = this.extractVideoId(query);
       if (videoId) {
-        loaderText.textContent = 'Получение данных трека...';
+        loaderText.textContent = 'Fetching track details...';
         const oembedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
         const res = await fetch(oembedUrl);
         const data = await res.json();
@@ -1226,15 +1226,15 @@ class ApexMusicPlayer {
         };
         this.currentYtResult = trackInfo;
         this.displayYouTubeResult(trackInfo);
-        this.showToast('Трек готов!');
+        this.showToast('Track ready!');
       } else {
-        throw new Error('Для поиска по ключевым словам требуется запуск в приложении на телефоне');
+        throw new Error('Keyword search requires running in the mobile app');
       }
 
     } catch (err) {
       loader.classList.add('hidden');
       console.warn('YouTube search error:', err);
-      this.showToast(`Ошибка: ${err.message}`);
+      this.showToast(`Error: ${err.message}`);
     }
   }
 
@@ -1242,7 +1242,7 @@ class ApexMusicPlayer {
     const container = document.getElementById('yt-history-list');
     if (!container || !items || items.length === 0) return;
 
-    container.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;padding-left:4px;">Все найденные треки (нажмите для выбора):</div>';
+    container.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;padding-left:4px;">Search results (tap to select):</div>';
 
     items.forEach((item) => {
       const row = document.createElement('div');
@@ -1262,7 +1262,7 @@ class ApexMusicPlayer {
       row.addEventListener('click', () => {
         this.currentYtResult = item;
         this.displayYouTubeResult(item);
-        this.showToast('Выбран трек: ' + item.title);
+        this.showToast('Selected: ' + item.title);
       });
 
       container.appendChild(row);
@@ -1296,19 +1296,19 @@ class ApexMusicPlayer {
     if (localIdx !== -1) {
       await this.loadTrack(localIdx, true);
       this.switchTab('view-player');
-      this.showToast('▶ Воспроизведение: ' + this.playlist[localIdx].title);
+      this.showToast('▶ Playing: ' + this.playlist[localIdx].title);
       return;
     }
 
     // 2. Auto-download in background and auto-play immediately when completed!
     this.pendingPlayTitle = title;
-    this.showToast('🚀 Загрузка и подготовка трека в плеер...');
+    this.showToast('🚀 Loading and preparing track...');
 
     const loader = document.getElementById('yt-loader');
     const loaderText = document.getElementById('yt-loader-text');
     if (loader && loaderText) {
       loader.classList.remove('hidden');
-      loaderText.textContent = `Загрузка в высоком качестве: "${title}"...`;
+      loaderText.textContent = `Downloading high quality: "${title}"...`;
     }
 
     await this.downloadCurrentYtTrack(true);
@@ -1326,25 +1326,25 @@ class ApexMusicPlayer {
     if (window.AndroidBridge && typeof window.AndroidBridge.downloadMp3Async === 'function') {
       if (loader && loaderText) {
         loader.classList.remove('hidden');
-        loaderText.textContent = `Конвертация "${title}" в MP3...`;
+        loaderText.textContent = `Converting "${title}" to MP3...`;
       }
       try {
         const res = await callNativeDownloadMp3(vidId, title, artist);
         if (loader) loader.classList.add('hidden');
         if (res && res.success) {
           if (!isSilent) {
-            this.showToast('Скачивание началось! Трек автоматически появится в плеере.');
+            this.showToast('Download started! Track will appear in player.');
           }
         } else {
-          this.showToast('Ошибка: ' + ((res && res.error) || 'Не удалось скачать MP3'));
+          this.showToast('Error: ' + ((res && res.error) || 'Failed to download MP3'));
         }
       } catch (e) {
         if (loader) loader.classList.add('hidden');
-        this.showToast('Ошибка скачивания: ' + e.message);
+        this.showToast('Download error: ' + e.message);
       }
     } else {
       window.open(`https://loader.to/ajax/download.php?format=mp3&url=https://www.youtube.com/watch?v=${vidId}`, '_blank');
-      this.showToast('Открытие загрузчика MP3...');
+      this.showToast('Starting MP3 download...');
     }
 
     this.saveYtToHistory(this.currentYtResult);
@@ -1355,12 +1355,12 @@ class ApexMusicPlayer {
     const title = this.currentYtResult.title || 'YouTube Track';
 
     if (this.playlist.some((t) => t.title && t.title.toLowerCase() === title.toLowerCase())) {
-      this.showToast('Трек уже в плейлисте');
+      this.showToast('Track is already in playlist');
       return;
     }
 
     this.downloadCurrentYtTrack(true);
-    this.showToast('Трек скачивается и будет добавлен в плейлист автоматически');
+    this.showToast('Track is downloading and will be added automatically');
   }
 
 
@@ -1395,7 +1395,7 @@ class ApexMusicPlayer {
     const list = document.getElementById('yt-history-list');
     if (!list) return;
     if (this.ytHistory.length === 0) {
-      list.innerHTML = '<div class="empty-history-text">Здесь появятся найденные треки</div>';
+      list.innerHTML = '<div class="empty-history-text">Downloaded tracks will appear here</div>';
       return;
     }
 
@@ -1425,7 +1425,7 @@ class ApexMusicPlayer {
     Array.from(files).forEach((file) => {
       const ext = file.name.split('.').pop().toLowerCase();
       let title = file.name.replace(/\.[^/.]+$/, '');
-      let artist = 'Локальный файл';
+      let artist = 'Local File';
 
       if (title.includes(' - ')) {
         const parts = title.split(' - ');
@@ -1448,7 +1448,7 @@ class ApexMusicPlayer {
     });
 
     this.renderPlaylistUI();
-    this.showToast(`Добавлено треков: ${addedCount}`);
+    this.showToast(`Tracks added: ${addedCount}`);
 
     if (addedCount > 0 && !this.isPlaying) {
       this.loadTrack(this.playlist.length - addedCount, true);
@@ -1456,7 +1456,7 @@ class ApexMusicPlayer {
   }
 
   handleExternalAudioUri(uriString) {
-    this.showToast('Загрузка внешнего аудио...');
+    this.showToast('Loading audio file...');
     fetch(uriString)
       .then((res) => res.blob())
       .then((blob) => {
@@ -1466,7 +1466,7 @@ class ApexMusicPlayer {
         this.handleFilesAdded([file]);
       })
       .catch((err) => {
-        this.showToast('Ошибка загрузки: ' + err.message);
+        this.showToast('Loading error: ' + err.message);
       });
   }
 
@@ -1480,10 +1480,10 @@ class ApexMusicPlayer {
     const demoCount = this.playlist.filter(t => t.isDemo).length;
 
     const items = [
-      { id: 'all', name: 'Все треки', icon: '🎵', count: totalCount },
-      { id: 'favorites', name: 'Избранное', icon: '💖', count: favCount },
-      { id: 'downloads', name: 'На телефоне', icon: '📥', count: downCount },
-      { id: 'demo', name: 'Демо', icon: '⚡', count: demoCount }
+      { id: 'all', name: 'All Tracks', icon: '🎵', count: totalCount },
+      { id: 'favorites', name: 'Favorites', icon: '💖', count: favCount },
+      { id: 'downloads', name: 'On Device', icon: '📥', count: downCount },
+      { id: 'demo', name: 'Demo', icon: '⚡', count: demoCount }
     ];
 
     (this.customPlaylists || []).forEach(pl => {
@@ -1510,7 +1510,7 @@ class ApexMusicPlayer {
 
     html += `
       <button id="btn-chip-new-pl" class="pl-chip pl-chip-new">
-        <span>➕ Новый</span>
+        <span>➕ New</span>
       </button>
     `;
 
@@ -1588,14 +1588,14 @@ class ApexMusicPlayer {
     const filtered = this.getFilteredTracks();
 
     // Set Title
-    let displayTitle = 'Все треки';
+    let displayTitle = 'All Tracks';
     let isCustom = false;
     if (this.activePlaylistFilter === 'favorites') {
-      displayTitle = '💖 Избранное';
+      displayTitle = '💖 Favorites';
     } else if (this.activePlaylistFilter === 'downloads') {
-      displayTitle = '📥 На телефоне';
+      displayTitle = '📥 On Device';
     } else if (this.activePlaylistFilter === 'demo') {
-      displayTitle = '⚡ Демо-треки';
+      displayTitle = '⚡ Demo Tracks';
     } else if (this.activePlaylistFilter && this.activePlaylistFilter.startsWith('pl-')) {
       const pl = (this.customPlaylists || []).find(p => p.id === this.activePlaylistFilter);
       if (pl) {
@@ -1605,7 +1605,7 @@ class ApexMusicPlayer {
     }
 
     if (titleEl) titleEl.textContent = displayTitle;
-    if (countEl) countEl.textContent = `${filtered.length} треков`;
+    if (countEl) countEl.textContent = `${filtered.length} tracks`;
     if (btnDelete) btnDelete.classList.toggle('hidden', !isCustom);
 
     listEl.innerHTML = '';
@@ -1618,8 +1618,8 @@ class ApexMusicPlayer {
       emptyDiv.style.fontSize = '13px';
       emptyDiv.innerHTML = `
         <div style="font-size:32px;margin-bottom:8px;">🎵</div>
-        <div>В этом разделе пока нет треков</div>
-        <div style="font-size:11px;margin-top:4px;">Добавьте музыку с телефона или скачайте с YouTube</div>
+        <div>No tracks in this playlist yet</div>
+        <div style="font-size:11px;margin-top:4px;">Add music from device or download from YouTube</div>
       `;
       listEl.appendChild(emptyDiv);
       return;
@@ -1640,10 +1640,10 @@ class ApexMusicPlayer {
           <div class="track-meta-artist">${track.artist}</div>
         </div>
         <div class="track-duration">${track.format || 'AUDIO'}</div>
-        <button class="btn-row-fav ${isFav ? 'is-fav' : ''}" title="${isFav ? 'Удалить из избранного' : 'В избранное'}">
+        <button class="btn-row-fav ${isFav ? 'is-fav' : ''}" title="${isFav ? 'Remove from favorites' : 'Add to favorites'}">
           ${isFav ? '💖' : '🤍'}
         </button>
-        <button class="btn-track-menu" title="Опции">⋮</button>
+        <button class="btn-track-menu" title="Options">⋮</button>
       `;
 
       // Click row to play
@@ -1685,7 +1685,7 @@ class ApexMusicPlayer {
     }
     const speedBadge = document.getElementById('speed-badge');
     if (speedBadge) speedBadge.textContent = `${this.playbackRate}x`;
-    this.showToast(`Скорость: ${this.playbackRate}x`);
+    this.showToast(`Speed: ${this.playbackRate}x`);
     this.saveState();
   }
 
@@ -1695,13 +1695,13 @@ class ApexMusicPlayer {
       if (this.ytPlayer && typeof this.ytPlayer.getCurrentTime === 'function') {
         const cur = this.ytPlayer.getCurrentTime() || 0;
         this.ytPlayer.seekTo(Math.max(0, cur + seconds), true);
-        this.showToast(`${seconds > 0 ? '+' : ''}${seconds} сек`);
+        this.showToast(`${seconds > 0 ? '+' : ''}${seconds}s`);
       }
       return;
     }
     if (this.audio && this.audio.duration) {
       this.audio.currentTime = Math.max(0, Math.min(this.audio.duration, this.audio.currentTime + seconds));
-      this.showToast(`${seconds > 0 ? '+' : ''}${seconds} сек`);
+      this.showToast(`${seconds > 0 ? '+' : ''}${seconds}s`);
     }
   }
 
@@ -1715,7 +1715,7 @@ class ApexMusicPlayer {
 
     if (titleEl) titleEl.textContent = track.title;
     const isFav = this.favorites.has(track.id);
-    if (favText) favText.textContent = isFav ? 'Удалить из избранного' : 'В избранное';
+    if (favText) favText.textContent = isFav ? 'Remove from Favorites' : 'Add to Favorites';
     if (favIcon) favIcon.textContent = isFav ? '💔' : '💖';
 
     if (btnRemoveFromPl) {
@@ -1730,10 +1730,10 @@ class ApexMusicPlayer {
     if (!track) return;
     if (this.favorites.has(track.id)) {
       this.favorites.delete(track.id);
-      this.showToast(`Удалено из избранного: ${track.title}`);
+      this.showToast(`Removed from Favorites: ${track.title}`);
     } else {
       this.favorites.add(track.id);
-      this.showToast(`💖 Добавлено в избранное: ${track.title}`);
+      this.showToast(`💖 Added to Favorites: ${track.title}`);
     }
     if (this.currentIndex >= 0 && this.playlist[this.currentIndex] && this.playlist[this.currentIndex].id === track.id) {
       this.updateFavoriteButton(this.favorites.has(track.id));
@@ -1753,7 +1753,7 @@ class ApexMusicPlayer {
     if (!modal || !listEl) return;
 
     if (!this.customPlaylists || this.customPlaylists.length === 0) {
-      listEl.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:12px;font-size:12px;">Нет созданных плейлистов.<br>Нажмите "Создать новый плейлист" выше.</div>';
+      listEl.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:12px;font-size:12px;">No playlists created yet.<br>Tap "Create New Playlist" above.</div>';
     } else {
       listEl.innerHTML = '';
       this.customPlaylists.forEach(pl => {
@@ -1763,17 +1763,17 @@ class ApexMusicPlayer {
         item.innerHTML = `
           <span>${pl.icon || '🎵'} ${pl.name}</span>
           <span style="color:${hasTrack ? 'var(--accent-cyan)' : 'var(--text-muted)'};font-weight:700;">
-            ${hasTrack ? '✓ В плейлисте' : '+ Добавить'}
+            ${hasTrack ? '✓ Added' : '+ Add'}
           </span>
         `;
         item.addEventListener('click', () => {
           if (!pl.trackIds) pl.trackIds = [];
           if (hasTrack) {
             pl.trackIds = pl.trackIds.filter(id => id !== track.id);
-            this.showToast(`Удалено из "${pl.name}"`);
+            this.showToast(`Removed from "${pl.name}"`);
           } else {
             pl.trackIds.push(track.id);
-            this.showToast(`Добавлено в "${pl.name}"`);
+            this.showToast(`Added to "${pl.name}"`);
           }
           this.saveState();
           this.openAddToPlaylistModal(track);
@@ -1789,7 +1789,7 @@ class ApexMusicPlayer {
   createCustomPlaylist(name, emoji = '🎵') {
     name = (name || '').trim();
     if (!name) {
-      this.showToast('Введите название плейлиста');
+      this.showToast('Enter playlist name');
       return;
     }
     const newPl = {
@@ -1812,19 +1812,19 @@ class ApexMusicPlayer {
     this.saveState();
     this.renderPlaylistsChips();
     this.renderPlaylistUI();
-    this.showToast(`Плейлист "${name}" создан!`);
+    this.showToast(`Playlist "${name}" created!`);
   }
 
   deleteActivePlaylist() {
     if (!this.activePlaylistFilter || !this.activePlaylistFilter.startsWith('pl-')) return;
     const pl = this.customPlaylists.find(p => p.id === this.activePlaylistFilter);
-    const plName = pl ? pl.name : 'плейлист';
+    const plName = pl ? pl.name : 'playlist';
     this.customPlaylists = this.customPlaylists.filter(p => p.id !== this.activePlaylistFilter);
     this.activePlaylistFilter = 'all';
     this.saveState();
     this.renderPlaylistsChips();
     this.renderPlaylistUI();
-    this.showToast(`Плейлист "${plName}" удален`);
+    this.showToast(`Playlist "${plName}" deleted`);
   }
 
   removeTrackFromActivePlaylist(track) {
@@ -1834,7 +1834,7 @@ class ApexMusicPlayer {
       pl.trackIds = pl.trackIds.filter(id => id !== track.id);
       this.saveState();
       this.renderPlaylistUI();
-      this.showToast(`Удалено из плейлиста: ${track.title}`);
+      this.showToast(`Removed from playlist: ${track.title}`);
     }
     const modal = document.getElementById('modal-track-menu');
     if (modal) modal.classList.add('hidden');
@@ -1843,14 +1843,14 @@ class ApexMusicPlayer {
   playAllInActivePlaylist() {
     const tracks = this.getFilteredTracks();
     if (tracks.length === 0) {
-      this.showToast('Плейлист пуст');
+      this.showToast('Playlist is empty');
       return;
     }
     const originalIdx = this.playlist.indexOf(tracks[0]);
     if (originalIdx !== -1) {
       this.loadTrack(originalIdx, true);
       this.switchTab('view-player');
-      this.showToast(`▶ Воспроизведение: ${tracks[0].title}`);
+      this.showToast(`▶ Playing: ${tracks[0].title}`);
     }
   }
 
@@ -1871,7 +1871,7 @@ class ApexMusicPlayer {
       c.classList.toggle('active', c.getAttribute('data-preset') === presetKey);
     });
 
-    this.showToast(`Эквалайзер: ${presetKey.toUpperCase()}`);
+    this.showToast(`Equalizer: ${presetKey.toUpperCase()}`);
   }
 
   setSleepTimer(minutes) {
@@ -1884,14 +1884,14 @@ class ApexMusicPlayer {
     if (minutes <= 0) {
       this.sleepTimerEnd = null;
       badge.classList.add('hidden');
-      this.showToast('Таймер сна отключен');
+      this.showToast('Sleep timer turned off');
       return;
     }
 
     this.sleepTimerEnd = Date.now() + minutes * 60 * 1000;
     badge.textContent = `${minutes}m`;
     badge.classList.remove('hidden');
-    this.showToast(`Таймер сна: ${minutes} мин.`);
+    this.showToast(`Sleep timer: ${minutes} min`);
 
     this.sleepTimerInterval = setInterval(() => {
       const remaining = Math.max(0, this.sleepTimerEnd - Date.now());
@@ -1899,7 +1899,7 @@ class ApexMusicPlayer {
         clearInterval(this.sleepTimerInterval);
         this.pauseAudio();
         badge.classList.add('hidden');
-        this.showToast('Таймер сна: музыка остановлена');
+        this.showToast('Sleep timer: playback stopped');
       } else {
         const minsLeft = Math.ceil(remaining / 60000);
         badge.textContent = `${minsLeft}m`;
@@ -1941,11 +1941,11 @@ class ApexMusicPlayer {
     if (this.favorites.has(track.id)) {
       this.favorites.delete(track.id);
       this.updateFavoriteButton(false);
-      this.showToast('Удалено из избранного');
+      this.showToast('Removed from favorites');
     } else {
       this.favorites.add(track.id);
       this.updateFavoriteButton(true);
-      this.showToast('Добавлено в избранное ❤️');
+      this.showToast('Added to favorites ❤️');
     }
     this.saveFavoritesToStorage();
   }
@@ -2092,7 +2092,7 @@ class ApexMusicPlayer {
     btnShuffle.addEventListener('click', () => {
       this.isShuffle = !this.isShuffle;
       btnShuffle.classList.toggle('active', this.isShuffle);
-      this.showToast(this.isShuffle ? 'Случайный порядок вкл' : 'Случайный порядок выкл');
+      this.showToast(this.isShuffle ? 'Shuffle on' : 'Shuffle off');
     });
 
     const btnRepeat = document.getElementById('btn-repeat');
@@ -2103,17 +2103,17 @@ class ApexMusicPlayer {
         btnRepeat.classList.remove('active');
         repeatBadge.classList.add('hidden');
         this.audio.loop = false;
-        this.showToast('Повтор выключен');
+        this.showToast('Repeat off');
       } else if (this.repeatMode === 1) {
         btnRepeat.classList.add('active');
         repeatBadge.classList.add('hidden');
         this.audio.loop = false;
-        this.showToast('Повтор всего плейлиста');
+        this.showToast('Repeat all');
       } else {
         btnRepeat.classList.add('active');
         repeatBadge.classList.remove('hidden');
         this.audio.loop = true;
-        this.showToast('Повтор текущего трека');
+        this.showToast('Repeat one');
       }
     });
 
@@ -2230,7 +2230,7 @@ class ApexMusicPlayer {
           this.handleYouTubeSearch(text);
         }
       } catch (err) {
-        this.showToast('Вставьте ссылку вручную в поле');
+        this.showToast('Paste URL into search field');
       }
     });
 
@@ -2305,7 +2305,7 @@ class ApexMusicPlayer {
     const btnDelPl = document.getElementById('btn-delete-active-playlist');
     if (btnDelPl) {
       btnDelPl.addEventListener('click', () => {
-        if (confirm('Удалить этот плейлист? Сами аудиофайлы останутся в медиатеке.')) {
+        if (confirm('Delete this playlist? Audio files will remain in your library.')) {
           this.deleteActivePlaylist();
         }
       });
@@ -2361,7 +2361,7 @@ class ApexMusicPlayer {
             this.playlist.splice(curIdx + 1, 0, t);
             this.renderPlaylistUI();
             this.saveState();
-            this.showToast(`⏭️ Следующим: ${t.title}`);
+            this.showToast(`⏭️ Play next: ${t.title}`);
           }
         }
         modalTrackMenu.classList.add('hidden');
@@ -2427,11 +2427,11 @@ class ApexMusicPlayer {
         this.saveState();
         modalSort.classList.add('hidden');
         const labels = {
-          'default': 'По порядку добавления',
-          'title-asc': 'По названию (А-Я)',
-          'artist-asc': 'По исполнителю'
+          'default': 'Default order',
+          'title-asc': 'By Title (A-Z)',
+          'artist-asc': 'By Artist'
         };
-        this.showToast(`Сортировка: ${labels[mode] || mode}`);
+        this.showToast(`Sort: ${labels[mode] || mode}`);
       });
     });
 
@@ -2460,7 +2460,7 @@ class ApexMusicPlayer {
         document.querySelectorAll('.vis-btn').forEach((b) => b.classList.remove('active'));
         e.currentTarget.classList.add('active');
         this.visMode = e.currentTarget.getAttribute('data-mode');
-        this.showToast(`Визуализатор: ${e.currentTarget.textContent}`);
+        this.showToast(`Visualizer: ${e.currentTarget.textContent}`);
       });
     });
   }

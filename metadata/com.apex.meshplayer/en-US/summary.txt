@@ -1,1 +1,0 @@
-Modern music player with YouTube audio downloads, playlists and equalizer

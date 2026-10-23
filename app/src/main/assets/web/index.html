@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#07070a" />
-  <title>Apex Music Player - Android 10</title>
+  <title>Apex Music Player</title>
   <script type="module" crossorigin src="./assets/index.js"></script>
 </head>
 <body>
@@ -29,18 +29,18 @@
         </div>
         <div class="brand-text">
           <h1>APEX MUSIC</h1>
-          <span id="header-status" class="brand-sub">Hi-Fi Audio • Huawei P20 Pro</span>
+          <span id="header-status" class="brand-sub">Hi-Fi Audio • Universal Android</span>
         </div>
       </div>
 
       <div class="header-actions">
         <!-- Playback Speed Button -->
-        <button id="btn-speed" class="header-btn" title="Скорость воспроизведения">
+        <button id="btn-speed" class="header-btn" title="Playback Speed">
           <span id="speed-badge" class="speed-badge">1.0x</span>
         </button>
 
         <!-- Sleep Timer Button -->
-        <button id="btn-sleep-timer" class="header-btn" title="Таймер сна">
+        <button id="btn-sleep-timer" class="header-btn" title="Sleep Timer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
@@ -49,7 +49,7 @@
         </button>
 
         <!-- EQ Button -->
-        <button id="btn-eq-toggle" class="header-btn" title="Эквалайзер">
+        <button id="btn-eq-toggle" class="header-btn" title="Equalizer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="4" y1="21" x2="4" y2="14"></line>
             <line x1="4" y1="10" x2="4" y2="3"></line>
@@ -92,9 +92,9 @@
       <div class="track-info-card">
         <div class="track-titles">
           <h2 id="track-title" class="track-title">Cyberwave Overdrive</h2>
-          <p id="track-artist" class="track-artist">Apex Sound Studio • Встроенный трек</p>
+          <p id="track-artist" class="track-artist">Apex Sound Studio • Built-in Track</p>
         </div>
-        <button id="btn-favorite" class="btn-fav" title="В избранное">
+        <button id="btn-favorite" class="btn-fav" title="Add to Favorites">
           <svg id="icon-fav-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
           </svg>
@@ -119,7 +119,7 @@
 
       <!-- Playback Controls Dock -->
       <div class="playback-controls">
-        <button id="btn-shuffle" class="ctrl-sub" title="Случайный порядок">
+        <button id="btn-shuffle" class="ctrl-sub" title="Shuffle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="16 3 21 3 21 8"></polyline>
             <line x1="4" y1="20" x2="21" y2="3"></line>
@@ -129,7 +129,7 @@
           </svg>
         </button>
 
-        <button id="btn-replay-10" class="ctrl-sub ctrl-seek-jump" title="Назад на 10 сек">
+        <button id="btn-replay-10" class="ctrl-sub ctrl-seek-jump" title="Rewind 10s">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M1 4v6h6"></path>
             <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
@@ -137,14 +137,14 @@
           <span class="jump-text">10</span>
         </button>
 
-        <button id="btn-prev" class="ctrl-step" title="Предыдущий трек">
+        <button id="btn-prev" class="ctrl-step" title="Previous Track">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <polygon points="19 20 9 12 19 4 19 20"></polygon>
             <line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="3"></line>
           </svg>
         </button>
 
-        <button id="btn-play-pause" class="ctrl-play-pause" title="Воспроизведение / Пауза">
+        <button id="btn-play-pause" class="ctrl-play-pause" title="Play / Pause">
           <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor">
             <polygon points="6 3 20 12 6 21 6 3"></polygon>
           </svg>
@@ -154,14 +154,14 @@
           </svg>
         </button>
 
-        <button id="btn-next" class="ctrl-step" title="Следующий трек">
+        <button id="btn-next" class="ctrl-step" title="Next Track">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <polygon points="5 4 15 12 5 20 5 4"></polygon>
             <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="3"></line>
           </svg>
         </button>
 
-        <button id="btn-forward-10" class="ctrl-sub ctrl-seek-jump" title="Вперед на 10 сек">
+        <button id="btn-forward-10" class="ctrl-sub ctrl-seek-jump" title="Forward 10s">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M23 4v6h-6"></path>
             <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
@@ -169,7 +169,7 @@
           <span class="jump-text">10</span>
         </button>
 
-        <button id="btn-repeat" class="ctrl-sub" title="Повтор">
+        <button id="btn-repeat" class="ctrl-sub" title="Repeat">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="17 1 21 5 17 9"></polyline>
             <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
@@ -189,15 +189,15 @@
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input type="text" id="search-input" placeholder="Поиск по названию или артисту..." />
+          <input type="text" id="search-input" placeholder="Search title or artist..." />
           <button id="btn-clear-search" class="btn-clear-search hidden">&times;</button>
         </div>
 
-        <label for="music-file-input" class="btn-add-music" title="Выбрать аудиофайлы с телефона">
+        <label for="music-file-input" class="btn-add-music" title="Add audio tracks from device">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 5v14M5 12h14"/>
           </svg>
-          <span>Добавить с телефона</span>
+          <span>Add from Device</span>
         </label>
         <input type="file" id="music-file-input" multiple accept="audio/*,.mp3,.flac,.wav,.ogg,.m4a,.aac,.opus,.wma" />
       </div>
@@ -212,17 +212,17 @@
       <!-- Active Playlist Sub-header / Toolbar -->
       <div class="playlist-meta-row">
         <div class="pl-meta-left">
-          <span id="playlist-current-title" class="pl-cur-title">Все треки</span>
-          <span id="playlist-count" class="pl-cur-count">0 треков</span>
+          <span id="playlist-current-title" class="pl-cur-title">All Tracks</span>
+          <span id="playlist-count" class="pl-cur-count">0 tracks</span>
         </div>
         <div class="pl-meta-right">
-          <button id="btn-sort-tracks" class="btn-tool-chip" title="Сортировка списка">
-            <span>↕️ Сортировка</span>
+          <button id="btn-sort-tracks" class="btn-tool-chip" title="Sort Tracks">
+            <span>↕️ Sort</span>
           </button>
-          <button id="btn-playlist-play-all" class="btn-tool-chip btn-tool-accent" title="Слушать этот плейлист">
-            <span>▶ Слушать</span>
+          <button id="btn-playlist-play-all" class="btn-tool-chip btn-tool-accent" title="Play this playlist">
+            <span>▶ Play All</span>
           </button>
-          <button id="btn-delete-active-playlist" class="btn-tool-chip btn-tool-danger hidden" title="Удалить этот плейлист">
+          <button id="btn-delete-active-playlist" class="btn-tool-chip btn-tool-danger hidden" title="Delete this playlist">
             <span>🗑️</span>
           </button>
         </div>
@@ -242,36 +242,36 @@
             <span>YouTube & YT Music</span>
           </div>
           <!-- Standalone Status Pill -->
-          <div id="btn-server-status" class="server-status-pill online" title="Прямое подключение к YouTube">
+          <div id="btn-server-status" class="server-status-pill online" title="Direct YouTube connection">
             <span class="status-dot"></span>
-            <span id="server-status-text">Онлайн • Автономно</span>
+            <span id="server-status-text">Online • Standalone</span>
           </div>
         </div>
 
-        <h2>Музыка из YouTube</h2>
-        <p class="yt-subtitle">Поддерживает YouTube, YouTube Music и поиск по названию</p>
+        <h2>YouTube & Online Music</h2>
+        <p class="yt-subtitle">Supports YouTube, YouTube Music & direct title search</p>
       </div>
 
       <!-- URL Input Box -->
       <div class="yt-input-card">
         <div class="yt-search-row">
-          <input type="text" id="yt-query" placeholder="Ссылка (youtube / music.youtube) или название..." />
-          <button id="btn-yt-paste" class="yt-btn-paste" title="Вставить из буфера">📋</button>
+          <input type="text" id="yt-query" placeholder="Search query or YouTube URL..." />
+          <button id="btn-yt-paste" class="yt-btn-paste" title="Paste from clipboard">📋</button>
         </div>
         <button id="btn-yt-search" class="yt-btn-submit">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <span>Найти музыку</span>
+          <span>Search Music</span>
         </button>
       </div>
 
       <!-- Quick Genre Pills -->
       <div class="yt-tags-scroll">
-        <span class="tags-label">Быстро:</span>
+        <span class="tags-label">Quick:</span>
         <button class="yt-tag-pill" data-q="Linkin Park Numb">🎸 Linkin Park</button>
-        <button class="yt-tag-pill" data-q="Miyagi">🎙️ Miyagi</button>
+        <button class="yt-tag-pill" data-q="Imagine Dragons">🎙️ Imagine Dragons</button>
         <button class="yt-tag-pill" data-q="Lo-Fi Hip Hop Beats">☕ Lo-Fi</button>
         <button class="yt-tag-pill" data-q="Synthwave 80s Retro">⚡ Synthwave</button>
         <button class="yt-tag-pill" data-q="Phonk drift">🏎️ Phonk</button>
@@ -280,7 +280,7 @@
       <!-- Loading Spinner for YT -->
       <div id="yt-loader" class="yt-loader hidden">
         <div class="loader-spinner"></div>
-        <span id="yt-loader-text">Подключение к YouTube и конвертация в MP3...</span>
+        <span id="yt-loader-text">Connecting to YouTube and preparing audio...</span>
       </div>
 
       <!-- Result Card -->
@@ -301,7 +301,7 @@
             <svg viewBox="0 0 24 24" fill="currentColor">
               <polygon points="5 3 19 12 5 21 5 3"></polygon>
             </svg>
-            <span>Слушать</span>
+            <span>Play</span>
           </button>
 
           <!-- Download to Phone -->
@@ -311,7 +311,7 @@
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span>Скачать MP3</span>
+            <span>Download MP3</span>
           </button>
 
           <!-- Add to Playlist -->
@@ -319,16 +319,16 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 5v14M5 12h14"/>
             </svg>
-            <span>В плейлист</span>
+            <span>To Playlist</span>
           </button>
         </div>
       </div>
 
       <!-- Recent Downloads / Extracted Tracks -->
       <div class="yt-history-section">
-        <h3>Скачанные треки</h3>
+        <h3>Downloaded Tracks</h3>
         <div id="yt-history-list" class="yt-history-list">
-          <div class="empty-history-text">Здесь появятся найденные треки</div>
+          <div class="empty-history-text">Downloaded tracks will appear here</div>
         </div>
       </div>
     </main>
@@ -336,9 +336,9 @@
     <!-- TAB 4: EQUALIZER VIEW -->
     <main id="view-equalizer" class="tab-view">
       <div class="eq-header">
-        <h2>5-Полосный Эквалайзер</h2>
+        <h2>5-Band Equalizer</h2>
         <label class="switch-wrap">
-          <span>Включен</span>
+          <span>Enabled</span>
           <input type="checkbox" id="check-eq-active" checked />
           <span class="switch-slider"></span>
         </label>
@@ -350,7 +350,7 @@
         <button class="eq-preset-chip" data-preset="rock">Rock 🎸</button>
         <button class="eq-preset-chip" data-preset="pop">Pop 🎤</button>
         <button class="eq-preset-chip" data-preset="vocal">Vocal 🎙️</button>
-        <button class="eq-preset-chip" data-preset="flat">Flat (Линейный)</button>
+        <button class="eq-preset-chip" data-preset="flat">Flat</button>
       </div>
 
       <div class="eq-sliders-row">
@@ -360,7 +360,7 @@
             <input type="range" class="eq-vertical-slider" id="band-60" min="-12" max="12" step="0.5" value="6" />
           </div>
           <span class="eq-band-label">60Hz</span>
-          <span class="eq-band-desc">Бас</span>
+          <span class="eq-band-desc">Bass</span>
         </div>
         <div class="eq-slider-col">
           <span class="eq-gain-val" id="val-band-250">0dB</span>
@@ -368,7 +368,7 @@
             <input type="range" class="eq-vertical-slider" id="band-250" min="-12" max="12" step="0.5" value="4" />
           </div>
           <span class="eq-band-label">250Hz</span>
-          <span class="eq-band-desc">Мидбас</span>
+          <span class="eq-band-desc">Mid-Bass</span>
         </div>
         <div class="eq-slider-col">
           <span class="eq-gain-val" id="val-band-1000">0dB</span>
@@ -376,7 +376,7 @@
             <input type="range" class="eq-vertical-slider" id="band-1000" min="-12" max="12" step="0.5" value="0" />
           </div>
           <span class="eq-band-label">1kHz</span>
-          <span class="eq-band-desc">Вокал</span>
+          <span class="eq-band-desc">Vocal</span>
         </div>
         <div class="eq-slider-col">
           <span class="eq-gain-val" id="val-band-4000">0dB</span>
@@ -384,7 +384,7 @@
             <input type="range" class="eq-vertical-slider" id="band-4000" min="-12" max="12" step="0.5" value="3" />
           </div>
           <span class="eq-band-label">4kHz</span>
-          <span class="eq-band-desc">Четкость</span>
+          <span class="eq-band-desc">Clarity</span>
         </div>
         <div class="eq-slider-col">
           <span class="eq-gain-val" id="val-band-14000">0dB</span>
@@ -392,16 +392,16 @@
             <input type="range" class="eq-vertical-slider" id="band-14000" min="-12" max="12" step="0.5" value="5" />
           </div>
           <span class="eq-band-label">14kHz</span>
-          <span class="eq-band-desc">Воздух</span>
+          <span class="eq-band-desc">Air</span>
         </div>
       </div>
 
       <div class="visualizer-settings-card">
-        <h3>Стиль визуализации</h3>
+        <h3>Visualizer Style</h3>
         <div class="vis-mode-buttons">
-          <button class="vis-btn active" data-mode="bars">Столбцы Неона</button>
-          <button class="vis-btn" data-mode="wave">Осциллограф</button>
-          <button class="vis-btn" data-mode="radial">Радиальный круг</button>
+          <button class="vis-btn active" data-mode="bars">Neon Bars</button>
+          <button class="vis-btn" data-mode="wave">Oscilloscope</button>
+          <button class="vis-btn" data-mode="radial">Radial Circle</button>
         </div>
       </div>
     </main>
@@ -413,7 +413,7 @@
           <circle cx="12" cy="12" r="10"></circle>
           <polygon points="10 8 16 12 10 16 10 8"></polygon>
         </svg>
-        <span>Сейчас</span>
+        <span>Playing</span>
       </button>
 
       <button id="nav-library" class="nav-tab">
@@ -425,7 +425,7 @@
           <line x1="3" y1="12" x2="3.01" y2="12"></line>
           <line x1="3" y1="18" x2="3.01" y2="18"></line>
         </svg>
-        <span>Плейлист</span>
+        <span>Library</span>
       </button>
 
       <button id="nav-youtube" class="nav-tab nav-tab-youtube">
@@ -439,7 +439,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 14h6v7H4zM14 9h6v12h-6zM4 3h6v7H4zM14 3h6v2h-6z"/>
         </svg>
-        <span>Эквалайзер</span>
+        <span>Equalizer</span>
       </button>
     </nav>
 
@@ -447,16 +447,16 @@
     <div id="modal-server-ip" class="bottom-sheet hidden">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <h3>Подключение к компьютеру (yt-dlp)</h3>
+        <h3>Host Connection (yt-dlp)</h3>
         <button class="sheet-close" id="close-ip-modal">&times;</button>
       </div>
       <div class="sheet-content">
-        <p class="sheet-desc">Компьютер конвертирует видео с YouTube в чистый MP3 320 kbps. Введите IP адрес компьютера в сети Wi-Fi:</p>
+        <p class="sheet-desc">Direct high-bitrate conversion host. Enter host IP address on local Wi-Fi:</p>
         <div style="display:flex;gap:8px;margin-bottom:12px;">
           <input type="text" id="input-server-ip" value="http://192.168.1.107:8080" style="flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px;color:#fff;font-family:monospace;font-size:13px;" />
-          <button id="btn-save-server-ip" style="background:var(--accent-cyan);color:#000;border:none;border-radius:10px;padding:0 16px;font-weight:700;font-size:13px;cursor:pointer;">Сохранить</button>
+          <button id="btn-save-server-ip" style="background:var(--accent-cyan);color:#000;border:none;border-radius:10px;padding:0 16px;font-weight:700;font-size:13px;cursor:pointer;">Save</button>
         </div>
-        <button id="btn-test-server-ip" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#fff;border-radius:10px;padding:10px;font-size:12px;font-weight:600;cursor:pointer;">⚡ Проверить связь с сервером</button>
+        <button id="btn-test-server-ip" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#fff;border-radius:10px;padding:10px;font-size:12px;font-weight:600;cursor:pointer;">⚡ Test Server Connection</button>
       </div>
     </div>
 
@@ -464,32 +464,34 @@
     <div id="modal-sleep-timer" class="bottom-sheet hidden">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <h3>Таймер сна</h3>
+        <h3>Sleep Timer</h3>
         <button class="sheet-close" id="close-timer-modal">&times;</button>
       </div>
       <div class="sheet-content">
-        <p class="sheet-desc">Музыка плавно затихнет и остановится по истечении выбранного времени:</p>
+        <p class="sheet-desc">Audio playback will smoothly stop after the selected duration:</p>
         <div class="timer-options-grid">
-          <button class="timer-opt" data-minutes="15">15 минут</button>
-          <button class="timer-opt" data-minutes="30">30 минут</button>
-          <button class="timer-opt" data-minutes="45">45 минут</button>
-          <button class="timer-opt" data-minutes="60">60 минут</button>
-          <button class="timer-opt timer-opt-cancel" data-minutes="0">Отключить</button>
+          <button class="timer-opt" data-minutes="15">15 minutes</button>
+          <button class="timer-opt" data-minutes="30">30 minutes</button>
+          <button class="timer-opt" data-minutes="45">45 minutes</button>
+          <button class="timer-opt" data-minutes="60">60 minutes</button>
+          <button class="timer-opt timer-opt-cancel" data-minutes="0">Turn Off</button>
         </div>
       </div>
+    </div>
+
     <!-- Modal: Create Custom Playlist -->
     <div id="modal-create-playlist" class="bottom-sheet hidden">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <h3>Новый плейлист</h3>
+        <h3>New Playlist</h3>
         <button class="sheet-close" id="close-create-playlist-modal">&times;</button>
       </div>
       <div class="sheet-content">
-        <p class="sheet-desc">Создайте свою подборку музыки:</p>
+        <p class="sheet-desc">Create your custom playlist collection:</p>
         <div class="playlist-create-form">
           <div class="playlist-input-row">
             <span id="chosen-playlist-emoji" class="emoji-chosen">🎵</span>
-            <input type="text" id="input-playlist-name" placeholder="Название (Тренировка, В дорогу...)" maxlength="32" />
+            <input type="text" id="input-playlist-name" placeholder="Name (Workout, Roadtrip...)" maxlength="32" />
           </div>
           <div class="emoji-picker-row">
             <button class="emoji-opt active" data-emoji="🎵">🎵</button>
@@ -503,7 +505,7 @@
             <button class="emoji-opt" data-emoji="🚀">🚀</button>
             <button class="emoji-opt" data-emoji="🎉">🎉</button>
           </div>
-          <button id="btn-confirm-create-playlist" class="btn-primary-block">Создать плейлист</button>
+          <button id="btn-confirm-create-playlist" class="btn-primary-block">Create Playlist</button>
         </div>
       </div>
     </div>
@@ -512,26 +514,26 @@
     <div id="modal-track-menu" class="bottom-sheet hidden">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <h3 id="track-menu-title" class="truncate-line">Действия с треком</h3>
+        <h3 id="track-menu-title" class="truncate-line">Track Options</h3>
         <button class="sheet-close" id="close-track-menu-modal">&times;</button>
       </div>
       <div class="sheet-content">
         <div class="track-menu-options">
           <button id="menu-btn-play-next" class="sheet-menu-item">
             <span class="sheet-menu-icon">⏭️</span>
-            <span class="sheet-menu-text">Воспроизвести следующим</span>
+            <span class="sheet-menu-text">Play Next</span>
           </button>
           <button id="menu-btn-toggle-fav" class="sheet-menu-item">
             <span class="sheet-menu-icon" id="menu-fav-icon">💖</span>
-            <span class="sheet-menu-text" id="menu-fav-text">В избранное</span>
+            <span class="sheet-menu-text" id="menu-fav-text">Add to Favorites</span>
           </button>
           <button id="menu-btn-add-to-pl" class="sheet-menu-item">
             <span class="sheet-menu-icon">➕</span>
-            <span class="sheet-menu-text">Добавить в плейлист...</span>
+            <span class="sheet-menu-text">Add to Playlist...</span>
           </button>
           <button id="menu-btn-remove-from-pl" class="sheet-menu-item item-danger hidden">
             <span class="sheet-menu-icon">❌</span>
-            <span class="sheet-menu-text">Удалить из этого плейлиста</span>
+            <span class="sheet-menu-text">Remove from this Playlist</span>
           </button>
         </div>
       </div>
@@ -541,12 +543,12 @@
     <div id="modal-add-to-playlist" class="bottom-sheet hidden">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <h3>Добавить в плейлист</h3>
+        <h3>Add to Playlist</h3>
         <button class="sheet-close" id="close-add-to-pl-modal">&times;</button>
       </div>
       <div class="sheet-content">
         <button id="btn-quick-create-pl" class="btn-create-inline">
-          <span>➕ Создать новый плейлист</span>
+          <span>➕ Create New Playlist</span>
         </button>
         <div id="user-playlists-list" class="sheet-playlists-list"></div>
       </div>
@@ -556,29 +558,29 @@
     <div id="modal-sort-menu" class="bottom-sheet hidden">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <h3>Сортировка треков</h3>
+        <h3>Sort Tracks</h3>
         <button class="sheet-close" id="close-sort-modal">&times;</button>
       </div>
       <div class="sheet-content">
         <div class="track-menu-options">
           <button class="sheet-menu-item sort-opt" data-sort="default">
             <span class="sheet-menu-icon">📋</span>
-            <span class="sheet-menu-text">По порядку добавления</span>
+            <span class="sheet-menu-text">Default Order</span>
           </button>
           <button class="sheet-menu-item sort-opt" data-sort="title-asc">
             <span class="sheet-menu-icon">🔤</span>
-            <span class="sheet-menu-text">По названию (А-Я / A-Z)</span>
+            <span class="sheet-menu-text">By Title (A-Z)</span>
           </button>
           <button class="sheet-menu-item sort-opt" data-sort="artist-asc">
             <span class="sheet-menu-icon">🎙️</span>
-            <span class="sheet-menu-text">По исполнителю</span>
+            <span class="sheet-menu-text">By Artist</span>
           </button>
         </div>
       </div>
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast-msg" class="toast-msg hidden">Трек добавлен</div>
+    <div id="toast-msg" class="toast-msg hidden">Track added</div>
 
   </div>
 

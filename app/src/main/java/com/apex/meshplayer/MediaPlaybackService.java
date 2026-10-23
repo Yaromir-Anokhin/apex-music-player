@@ -76,7 +76,7 @@ public class MediaPlaybackService extends Service {
 
     private boolean mIsPlaying = false;
     private String mTitle = "Apex Music Player";
-    private String mArtist = "Ожидание воспроизведения";
+    private String mArtist = "Waiting for playback";
     private String mCoverUrl = null;
     private long mPositionMs = 0;
     private long mDurationMs = 0;
@@ -186,10 +186,10 @@ public class MediaPlaybackService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    "Воспроизведение музыки",
+                    "Music Playback",
                     NotificationManager.IMPORTANCE_LOW
             );
-            channel.setDescription("Управление воспроизведением плеера Apex Music в шторке");
+            channel.setDescription("Apex Music notification shade playback controls");
             channel.setShowBadge(false);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
             if (mNotificationManager != null) {
@@ -482,19 +482,19 @@ public class MediaPlaybackService extends Service {
 
         // Action 0: Previous
         builder.addAction(new Notification.Action.Builder(
-                R.drawable.ic_skip_prev, "Назад", prevPI
+                R.drawable.ic_skip_prev, "Previous", prevPI
         ).build());
 
         // Action 1: Play / Pause
         int playIcon = mIsPlaying ? R.drawable.ic_pause_arrow : R.drawable.ic_play_arrow;
-        String playTitle = mIsPlaying ? "Пауза" : "Играть";
+        String playTitle = mIsPlaying ? "Pause" : "Play";
         builder.addAction(new Notification.Action.Builder(
                 playIcon, playTitle, togglePI
         ).build());
 
         // Action 2: Next
         builder.addAction(new Notification.Action.Builder(
-                R.drawable.ic_skip_next, "Вперед", nextPI
+                R.drawable.ic_skip_next, "Next", nextPI
         ).build());
 
         return builder.build();

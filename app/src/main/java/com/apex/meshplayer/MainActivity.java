@@ -233,7 +233,7 @@ public class MainActivity extends Activity {
                     } else {
                         new File(meta.optString("tmpPath")).delete();
                         runOnUiThread(() -> Toast.makeText(MainActivity.this,
-                                "Ошибка скачивания: " + meta.optString("title"), Toast.LENGTH_SHORT).show());
+                                "Download error: " + meta.optString("title"), Toast.LENGTH_SHORT).show());
                     }
                     return;
                 }
@@ -267,7 +267,7 @@ public class MainActivity extends Activity {
                         final String finalFileName = targetFile.getName();
 
                         runOnUiThread(() -> {
-                            Toast.makeText(MainActivity.this, "Скачано и добавлено в плеер: " + finalTitle, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Downloaded and added: " + finalTitle, Toast.LENGTH_SHORT).show();
                             if (mWebView != null) {
                                 try {
                                     JSONObject obj = new JSONObject();
@@ -322,7 +322,7 @@ public class MainActivity extends Activity {
                 }
 
                 runOnUiThread(() -> {
-                    Toast.makeText(MainActivity.this, "Скачано с обложкой: " + title, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Downloaded with cover artwork: " + title, Toast.LENGTH_SHORT).show();
                     if (mWebView != null) {
                         String js = String.format("if (window.onAndroidTrackDownloaded) { window.onAndroidTrackDownloaded(%s); }",
                                 JSONObject.quote(obj.toString()));
@@ -332,7 +332,7 @@ public class MainActivity extends Activity {
             } catch (Throwable t) {
                 android.util.Log.e("ApexMusic", "processTaggedDownload error", t);
                 runOnUiThread(() -> Toast.makeText(MainActivity.this,
-                        "Ошибка сохранения: " + t.getMessage(), Toast.LENGTH_LONG).show());
+                        "Save error: " + t.getMessage(), Toast.LENGTH_LONG).show());
             }
         }).start();
     }
@@ -384,7 +384,7 @@ public class MainActivity extends Activity {
                 DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                 if (dm != null) {
                     dm.enqueue(request);
-                    Toast.makeText(MainActivity.this, "Скачивание в папку Загрузки: " + filename, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Downloading to Downloads: " + filename, Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 try {
@@ -492,7 +492,7 @@ public class MainActivity extends Activity {
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
 
                 try {
-                    startActivityForResult(Intent.createChooser(intent, "Выберите аудиофайлы или треки"), FILE_CHOOSER_REQUEST_CODE);
+                    startActivityForResult(Intent.createChooser(intent, "Select audio tracks"), FILE_CHOOSER_REQUEST_CODE);
                 } catch (Exception e) {
                     mFilePathCallback = null;
                     return false;
@@ -582,10 +582,10 @@ public class MainActivity extends Activity {
                         meta.put("videoId", videoId != null ? videoId : "");
                         meta.put("thumbnail", thumbnail != null ? thumbnail : "");
                         mTrackDownloads.put(downloadId, meta);
-                        Toast.makeText(MainActivity.this, "Скачивание: " + cleanName, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Downloading: " + cleanName, Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "Ошибка скачивания: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Download error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -606,7 +606,7 @@ public class MainActivity extends Activity {
                             for (File f : files) {
                                 String name = f.getName();
                                 String title = name.replaceFirst("\\.[^.]+$", "");
-                                String artist = "Загрузки телефона";
+                                String artist = "Device Audio";
                                 if (title.contains(" - ")) {
                                     String[] parts = title.split(" - ", 2);
                                     artist = parts[0].trim();
@@ -738,7 +738,7 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void downloadMp3Async(final String videoId, final String title, final String artist, final String callbackId) {
-            runOnUiThread(() -> Toast.makeText(MainActivity.this, "Подготовка к скачиванию MP3: " + title, Toast.LENGTH_SHORT).show());
+            runOnUiThread(() -> Toast.makeText(MainActivity.this, "Preparing MP3 download: " + title, Toast.LENGTH_SHORT).show());
             try {
                 YouTubeExtractorHelper.requestMp3DownloadAsync(videoId, jsonResult -> {
                     runOnUiThread(() -> {
@@ -755,7 +755,7 @@ public class MainActivity extends Activity {
                                             "https://i.ytimg.com/vi/" + videoId + "/hqdefault.jpg");
                                 }
                             } else {
-                                Toast.makeText(MainActivity.this, "Ошибка конвертации: " + res.optString("error", "Неизвестно"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Conversion error: " + res.optString("error", "Unknown"), Toast.LENGTH_SHORT).show();
                             }
                             if (mWebView != null) {
                                 String js = String.format("if (window.onNativeMp3DownloadResult) { window.onNativeMp3DownloadResult(%s, %s); }",
