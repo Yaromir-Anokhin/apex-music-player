@@ -1,18 +1,14 @@
 Categories:
-  - Multimedia
   - Local Media Player
+  - Multimedia
   - Online Media Player
 License: GPL-3.0-only
 SourceCode: https://github.com/Yaromir-Anokhin/apex-music-player
 IssueTracker: https://github.com/Yaromir-Anokhin/apex-music-player/issues
 Changelog: https://github.com/Yaromir-Anokhin/apex-music-player/releases
 
-AutoUpdateMode: Version
-UpdateCheckMode: Tags
-CurrentVersion: 1.1.0
-CurrentVersionCode: 2
+AutoName: Apex Music
 
-Summary: Modern music player with YouTube audio downloads, playlists and equalizer
 Description: |-
   Apex Music Player is a modern, lightweight, privacy-focused open-source audio
   player for Android. It is engineered for universal compatibility across all
@@ -46,7 +42,11 @@ Builds:
     versionCode: 2
     commit: v1.1.0
     gradle:
-      - universalRelease
+      - universal
     output: app/build/outputs/apk/universal/release/ApexMusic-Player-Universal-release.apk
 
 ArchivePolicy: 3
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.1.0
+CurrentVersionCode: 2
