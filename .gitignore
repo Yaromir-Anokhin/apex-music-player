@@ -32,3 +32,5 @@ __pycache__/
 # Backup and temp files
 *.tmp
 *.bak
+fdroiddata/
+
