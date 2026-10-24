@@ -1,0 +1,62 @@
+{
+  "METADATA_VERSION": 20002,
+  "allow_disabled_algorithms": false,
+  "ApexMusic-Player-Universal-release.apk": {
+    "hash": "0dd97d8bc21cfce56c50f75b78a838da6c27c85b885d83d02e6f8a921d205c8c",
+    "hashType": "sha256",
+    "uses-permission": [
+      [
+        "android.permission.INTERNET",
+        null
+      ],
+      [
+        "android.permission.ACCESS_NETWORK_STATE",
+        null
+      ],
+      [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        32
+      ],
+      [
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        29
+      ],
+      [
+        "android.permission.READ_MEDIA_AUDIO",
+        null
+      ],
+      [
+        "android.permission.WAKE_LOCK",
+        null
+      ],
+      [
+        "android.permission.FOREGROUND_SERVICE",
+        null
+      ],
+      [
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        null
+      ],
+      [
+        "android.permission.POST_NOTIFICATIONS",
+        null
+      ]
+    ],
+    "uses-permission-sdk-23": [],
+    "features": [],
+    "icons_src": {},
+    "icons": {},
+    "antiFeatures": {},
+    "packageName": "com.apex.meshplayer",
+    "versionCode": 2,
+    "name": "Apex Music",
+    "versionName": "1.1.0",
+    "minSdkVersion": 21,
+    "targetSdkVersion": 35,
+    "sig": "c6d0cb57d0bf3e30db6b0a1b157a62d6",
+    "signer": "e603cf990ff11e5ae28e63dcbee2aceb46e1ca69e26514d172527af9c952d202",
+    "size": 2714590,
+    "apkName": "ApexMusic-Player-Universal-release.apk",
+    "added": 1792859992.836142
+  }
+}

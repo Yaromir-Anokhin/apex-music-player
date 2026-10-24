@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Music Player • F-Droid Repository</title>
+  <style>
+    :root {
+      --bg: #07070a;
+      --card: #121218;
+      --cyan: #00f3ff;
+      --pink: #ff007f;
+      --text: #ffffff;
+      --muted: #a0a0b0;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      box-sizing: border-box;
+      padding: 24px 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      box-shadow: 0 10px 40px rgba(0, 243, 255, 0.1);
+      border-radius: 24px;
+      padding: 32px 24px;
+      max-width: 460px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--cyan), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle {
+      margin: 0 0 24px 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .qr-box {
+      background: #000;
+      padding: 16px;
+      border-radius: 16px;
+      display: inline-block;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 24px;
+    }
+    .qr-box img {
+      width: 200px;
+      height: 200px;
+      display: block;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px 20px;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      box-sizing: border-box;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #00f3ff, #0088ff);
+      color: #000;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .url-copy {
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--muted);
+      word-break: break-all;
+      background: rgba(0,0,0,0.4);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(0, 243, 255, 0.15);
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <span class="badge">OFFICIAL F-DROID REPOSITORY</span>
+    <h1>APEX MUSIC PLAYER</h1>
+    <p class="subtitle">Universal Android Audio Player • Free & Open Source (GPLv3)<br>Scan the QR code with F-Droid, Neo Store, or Droid-ify:</p>
+    
+    <div class="qr-box">
+      <img src="qr_fdroid.png" alt="Scan with F-Droid" />
+    </div>
+
+    <a class="btn btn-primary" href="fdroidrepos://yaromir-anokhin.github.io/apex-music-player/fdroid/repo?fingerprint=2EFBBEE5AE88EA77D021B3612C489D425AC364E71F0A532814A7689CB29C92F3">⚡ Add to F-Droid App</a>
+    <a class="btn btn-secondary" href="fdroid/repo/ApexMusic-Player-Universal-release.apk">📥 Download Universal APK (Direct)</a>
+    <a class="btn btn-secondary" href="https://github.com/Yaromir-Anokhin/apex-music-player">🐙 View on GitHub</a>
+
+    <div class="url-copy">
+      Repo URL: https://yaromir-anokhin.github.io/apex-music-player/fdroid/repo<br><br>
+      SHA-256 Fingerprint:<br>2EFBBEE5AE88EA77D021B3612C489D425AC364E71F0A532814A7689CB29C92F3
+    </div>
+  </div>
+</body>
+</html>

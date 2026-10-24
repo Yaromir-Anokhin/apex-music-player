@@ -1,0 +1,8 @@
+repo_name: "Apex Music Player Repo"
+repo_description: "Direct F-Droid repository for Apex Music Player - Universal Android compatibility"
+repo_url: "https://yaromir-anokhin.github.io/apex-music-player/fdroid/repo"
+archive_older: 0
+keystore: "keystore.p12"
+repo_keyalias: "apexmusic"
+keystorepass: "apexmusicplayer"
+keypass: "apexmusicplayer"
