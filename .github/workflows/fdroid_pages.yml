@@ -1,0 +1,251 @@
+name: F-Droid - Deploy Repository to GitHub Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  deploy-fdroid:
+    name: Build F-Droid Repo & Deploy Pages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install web dependencies
+        run: npm ci || npm install
+
+      - name: Build web application (Vite)
+        run: npm run build
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Universal Release APK
+        run: ./gradlew assembleUniversalRelease
+
+      - name: Set up fdroidserver & Python
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fdroidserver python3-qrcode python3-pil
+          if [ -d "$ANDROID_HOME/build-tools" ]; then
+            LATEST_BUILD_TOOLS=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -n 1)
+            echo "$LATEST_BUILD_TOOLS" >> $GITHUB_PATH
+          fi
+
+      - name: Generate F-Droid Repository
+        run: |
+          mkdir -p fdroid_site/fdroid/repo
+          cp app/build/outputs/apk/universal/release/*.apk fdroid_site/fdroid/repo/
+          cp .github/fdroid/keystore.p12 fdroid_site/fdroid/keystore.p12
+          touch fdroid_site/.nojekyll
+          
+          cd fdroid_site/fdroid
+          cat << 'EOF' > config.yml
+          repo_name: "Apex Music Player Repo"
+          repo_description: "Direct F-Droid repository for Apex Music Player - Universal Android compatibility"
+          repo_url: "https://yaromir-anokhin.github.io/apex-music-player/fdroid/repo"
+          archive_older: 0
+          keystore: "keystore.p12"
+          repo_keyalias: "apexmusic"
+          keystorepass: "apexmusicplayer"
+          keypass: "apexmusicplayer"
+          EOF
+          
+          fdroid update --create-metadata
+          cd ../..
+
+      - name: Generate Beautiful HTML Landing Page & QR Code
+        run: |
+          python3 - << 'EOF'
+          import qrcode
+
+          repo_url = "https://yaromir-anokhin.github.io/apex-music-player/fdroid/repo"
+          fingerprint = "2EFBBEE5AE88EA77D021B3612C489D425AC364E71F0A532814A7689CB29C92F3"
+          repo_with_fp = f"{repo_url}?fingerprint={fingerprint}"
+          fdroid_scheme = f"fdroidrepos://yaromir-anokhin.github.io/apex-music-player/fdroid/repo?fingerprint={fingerprint}"
+
+          qr = qrcode.QRCode(box_size=10, border=2)
+          qr.add_data(fdroid_scheme)
+          qr.make(fit=True)
+          img = qr.make_image(fill_color="#00f3ff", back_color="#07070a")
+          img.save("fdroid_site/qr_fdroid.png")
+
+          html_content = f"""<!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Apex Music Player • F-Droid Repository</title>
+            <style>
+              :root {{
+                --bg: #07070a;
+                --card: #121218;
+                --cyan: #00f3ff;
+                --pink: #ff007f;
+                --text: #ffffff;
+                --muted: #a0a0b0;
+              }}
+              body {{
+                margin: 0;
+                padding: 0;
+                background-color: var(--bg);
+                color: var(--text);
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                text-align: center;
+                box-sizing: border-box;
+                padding: 24px 16px;
+              }}
+              .card {{
+                background: var(--card);
+                border: 1px solid rgba(0, 243, 255, 0.2);
+                box-shadow: 0 10px 40px rgba(0, 243, 255, 0.1);
+                border-radius: 24px;
+                padding: 32px 24px;
+                max-width: 460px;
+                width: 100%;
+                box-sizing: border-box;
+              }}
+              h1 {{
+                margin: 0 0 8px 0;
+                font-size: 26px;
+                font-weight: 800;
+                letter-spacing: 1px;
+                background: linear-gradient(135deg, var(--cyan), var(--pink));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+              }}
+              p.subtitle {{
+                margin: 0 0 24px 0;
+                color: var(--muted);
+                font-size: 14px;
+                line-height: 1.5;
+              }}
+              .qr-box {{
+                background: #000;
+                padding: 16px;
+                border-radius: 16px;
+                display: inline-block;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                margin-bottom: 24px;
+              }}
+              .qr-box img {{
+                width: 200px;
+                height: 200px;
+                display: block;
+              }}
+              .btn {{
+                display: block;
+                width: 100%;
+                padding: 14px 20px;
+                margin-bottom: 12px;
+                border-radius: 12px;
+                font-size: 15px;
+                font-weight: 700;
+                text-decoration: none;
+                box-sizing: border-box;
+                transition: transform 0.2s, opacity 0.2s;
+              }}
+              .btn:active {{
+                transform: scale(0.98);
+              }}
+              .btn-primary {{
+                background: linear-gradient(135deg, #00f3ff, #0088ff);
+                color: #000;
+              }}
+              .btn-secondary {{
+                background: rgba(255, 255, 255, 0.08);
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.15);
+              }}
+              .url-copy {{
+                font-family: monospace;
+                font-size: 11px;
+                color: var(--muted);
+                word-break: break-all;
+                background: rgba(0,0,0,0.4);
+                padding: 8px 12px;
+                border-radius: 8px;
+                margin-top: 16px;
+              }}
+              .badge {{
+                display: inline-block;
+                background: rgba(0, 243, 255, 0.15);
+                color: var(--cyan);
+                font-size: 11px;
+                font-weight: 700;
+                padding: 4px 10px;
+                border-radius: 20px;
+                margin-bottom: 16px;
+                letter-spacing: 0.5px;
+              }}
+            </style>
+          </head>
+          <body>
+            <div class="card">
+              <span class="badge">OFFICIAL F-DROID REPOSITORY</span>
+              <h1>APEX MUSIC PLAYER</h1>
+              <p class="subtitle">Universal Android Audio Player • Free & Open Source (GPLv3)<br>Scan the QR code with F-Droid, Neo Store, or Droid-ify:</p>
+              
+              <div class="qr-box">
+                <img src="qr_fdroid.png" alt="Scan with F-Droid" />
+              </div>
+
+              <a class="btn btn-primary" href="{fdroid_scheme}">⚡ Add to F-Droid App</a>
+              <a class="btn btn-secondary" href="fdroid/repo/ApexMusic-Player-Universal-release.apk">📥 Download Universal APK (Direct)</a>
+              <a class="btn btn-secondary" href="https://github.com/Yaromir-Anokhin/apex-music-player">🐙 View on GitHub</a>
+
+              <div class="url-copy">
+                Repo URL: {repo_url}<br><br>
+                SHA-256 Fingerprint:<br>{fingerprint}
+              </div>
+            </div>
+          </body>
+          </html>
+          """
+
+          with open("fdroid_site/index.html", "w", encoding="utf-8") as f:
+              f.write(html_content)
+          print("HTML & QR generated successfully")
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./fdroid_site
+          publish_branch: gh-pages
