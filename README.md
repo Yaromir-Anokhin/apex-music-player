@@ -51,6 +51,22 @@
 
 ---
 
+### 📲 Installation & F-Droid Repository
+
+#### 1. Direct Download
+Download the universal APK directly from [GitHub Releases (v1.1.0)](https://github.com/Yaromir-Anokhin/apex-music-player/releases/latest).
+
+#### 2. Official F-Droid Repository (Automatic Updates)
+Add our dedicated repository to receive automatic updates directly through **F-Droid**, **Neo Store**, or **Droid-ify**:
+
+🌐 **Repository Web Page & QR Code**: [https://yaromir-anokhin.github.io/apex-music-player/](https://yaromir-anokhin.github.io/apex-music-player/)
+
+- **Repository URL**: `https://yaromir-anokhin.github.io/apex-music-player/fdroid/repo`
+- **SHA-256 Fingerprint**: `2EFBBEE5AE88EA77D021B3612C489D425AC364E71F0A532814A7689CB29C92F3`
+- **One-Tap Link**: [Add to F-Droid](fdroidrepos://yaromir-anokhin.github.io/apex-music-player/fdroid/repo?fingerprint=2EFBBEE5AE88EA77D021B3612C489D425AC364E71F0A532814A7689CB29C92F3)
+
+---
+
 ### Building from Source
 
 #### Prerequisites
