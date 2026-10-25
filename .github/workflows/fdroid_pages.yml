@@ -187,6 +187,10 @@ jobs:
                 background: linear-gradient(135deg, #00f3ff, #0088ff);
                 color: #000;
               }}
+              .btn-obtainium {{
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: #fff;
+              }}
               .btn-secondary {{
                 background: rgba(255, 255, 255, 0.08);
                 color: #fff;
@@ -226,6 +230,7 @@ jobs:
               </div>
 
               <a class="btn btn-primary" href="{fdroid_scheme}">⚡ Add to F-Droid App</a>
+              <a class="btn btn-obtainium" href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Yaromir-Anokhin/apex-music-player">🔄 Add to Obtainium (Auto-Updates)</a>
               <a class="btn btn-secondary" href="fdroid/repo/ApexMusic-Player-Universal-release.apk">📥 Download Universal APK (Direct)</a>
               <a class="btn btn-secondary" href="https://github.com/Yaromir-Anokhin/apex-music-player">🐙 View on GitHub</a>
 

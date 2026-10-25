@@ -12,6 +12,7 @@
 <p align="center">
   <a href="https://github.com/Yaromir-Anokhin/apex-music-player/actions"><img src="https://img.shields.io/github/actions/workflow/status/Yaromir-Anokhin/apex-music-player/build.yml?branch=main&label=CI%20Build&logo=github" alt="CI Build"></a>
   <a href="https://f-droid.org"><img src="https://img.shields.io/badge/F--Droid-Ready-blue?logo=f-droid" alt="F-Droid Ready"></a>
+  <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Yaromir-Anokhin/apex-music-player"><img src="https://img.shields.io/badge/Obtainium-Add%20App-10B981?logo=android&logoColor=white" alt="Add to Obtainium"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-green.svg" alt="License: GPL-3.0"></a>
   <img src="https://img.shields.io/badge/Android-5.0%20to%2015%2B%20(Universal)-brightgreen?logo=android" alt="Android 5.0 to 15+">
   <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome">
@@ -64,6 +65,13 @@ Add our dedicated repository to receive automatic updates directly through **F-D
 - **Repository URL**: `https://yaromir-anokhin.github.io/apex-music-player/fdroid/repo`
 - **SHA-256 Fingerprint**: `2EFBBEE5AE88EA77D021B3612C489D425AC364E71F0A532814A7689CB29C92F3`
 - **One-Tap Link**: [Add to F-Droid](fdroidrepos://yaromir-anokhin.github.io/apex-music-player/fdroid/repo?fingerprint=2EFBBEE5AE88EA77D021B3612C489D425AC364E71F0A532814A7689CB29C92F3)
+
+#### 3. Obtainium (Direct Auto-Updates)
+Add Apex Music Player to [Obtainium](https://github.com/ImranR98/Obtainium) with one tap to get automatic updates as soon as new releases are published on GitHub:
+
+[![Add to Obtainium](https://img.shields.io/badge/Obtainium-Add%20to%20App-10B981?style=for-the-badge&logo=android&logoColor=white)](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Yaromir-Anokhin/apex-music-player)
+
+*Direct Deep Link: `obtainium://add/https://github.com/Yaromir-Anokhin/apex-music-player`*
 
 ---
 
