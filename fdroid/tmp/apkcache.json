@@ -2,7 +2,7 @@
   "METADATA_VERSION": 20002,
   "allow_disabled_algorithms": false,
   "ApexMusic-Player-Universal-release.apk": {
-    "hash": "6d398f3a944251695fdf008a94cbe26ba9d5defa005b4bad33d6bf0dad8ae66b",
+    "hash": "f47dd9bf4a3e04c04dbbb7c604ad81a115aa40bb9870cfdfe94906fd86d7e841",
     "hashType": "sha256",
     "uses-permission": [
       [
@@ -53,10 +53,10 @@
     "versionName": "1.1.0",
     "minSdkVersion": 21,
     "targetSdkVersion": 35,
-    "sig": "215cd562e1ee732278c8f1f7bc78c712",
-    "signer": "32512a0f1a852b574a6cd3ff95244d7fa33d700f966daeb8bbad666548b49bd8",
-    "size": 2714594,
+    "sig": "97cb6a2209203ed3596b20b5a0e102ec",
+    "signer": "739335708c58fa019cc748959639dc5f6d90f3be77d95e012183738a194cadb6",
+    "size": 2714591,
     "apkName": "ApexMusic-Player-Universal-release.apk",
-    "added": 1793023444.833222
+    "added": 1793027092.617862
   }
 }
