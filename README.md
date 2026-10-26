@@ -15,7 +15,13 @@
   <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Yaromir-Anokhin/apex-music-player"><img src="https://img.shields.io/badge/Obtainium-Add%20App-10B981?logo=android&logoColor=white" alt="Add to Obtainium"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-green.svg" alt="License: GPL-3.0"></a>
   <img src="https://img.shields.io/badge/Android-5.0%20to%2015%2B%20(Universal)-brightgreen?logo=android" alt="Android 5.0 to 15+">
-  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome">
+  <a href="https://github.com/Yaromir-Anokhin/apex-music-player/stargazers"><img src="https://img.shields.io/github/stars/Yaromir-Anokhin/apex-music-player?style=social" alt="GitHub Stars"></a>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/screen-player.png" width="31%" alt="Playback Screen" />
+  <img src="assets/screenshots/screen-library.png" width="31%" alt="Library & Playlists" />
+  <img src="assets/screenshots/screen-equalizer.png" width="31%" alt="Equalizer & Visualizer" />
 </p>
 
 ---
@@ -108,6 +114,17 @@ The repository includes the official F-Droid build recipe in [`metadata/com.apex
 - Built purely with open-source dependencies (`NewPipeExtractor`, `okhttp3`, `desugar_jdk_libs`).
 - Zero tracking, analytics, or proprietary Google libraries.
 
+## ⭐ Support the Project
+
+If you find Apex Music Player useful, please give it a **star ⭐ on GitHub**! Every star helps increase project visibility in the open-source Android community and motivates continued development.
+
+<p align="center">
+  <a href="https://star-history.com/#Yaromir-Anokhin/apex-music-player&Date">
+    <img src="https://api.star-history.com/svg?repos=Yaromir-Anokhin/apex-music-player&type=Date" alt="Star History Chart" width="700" />
+  </a>
+</p>
+
 ## 📜 License
 This project is licensed under the [GNU General Public License v3.0](LICENSE).
 Feel free to fork, contribute, and distribute!
+
