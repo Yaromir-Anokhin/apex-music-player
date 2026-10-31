@@ -426,10 +426,13 @@ public class MainActivity extends Activity {
                                     String mime = "audio/mpeg";
                                     if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) mime = "image/jpeg";
                                     else if (lower.endsWith(".png")) mime = "image/png";
-                                    else if (lower.endsWith(".m4a")) mime = "audio/mp4";
+                                    else if (lower.endsWith(".webp")) mime = "image/webp";
+                                    else if (lower.endsWith(".m4a") || lower.endsWith(".mp4")) mime = "audio/mp4";
+                                    else if (lower.endsWith(".aac")) mime = "audio/aac";
                                     else if (lower.endsWith(".wav")) mime = "audio/wav";
                                     else if (lower.endsWith(".flac")) mime = "audio/flac";
-                                    else if (lower.endsWith(".ogg")) mime = "audio/ogg";
+                                    else if (lower.endsWith(".ogg") || lower.endsWith(".oga")) mime = "audio/ogg";
+                                    else if (lower.endsWith(".opus")) mime = "audio/opus";
 
                                     Map<String, String> headers = new HashMap<>();
                                     headers.put("Access-Control-Allow-Origin", "*");
@@ -455,8 +458,15 @@ public class MainActivity extends Activity {
                                         long contentLength = Math.max(0, end - start + 1);
 
                                         FileInputStream fis = new FileInputStream(file);
-                                        if (start > 0) {
-                                            long skipped = fis.skip(start);
+                                        long remaining = start;
+                                        while (remaining > 0) {
+                                            long skipped = fis.skip(remaining);
+                                            if (skipped <= 0) {
+                                                if (fis.read() == -1) break;
+                                                remaining--;
+                                            } else {
+                                                remaining -= skipped;
+                                            }
                                         }
                                         InputStream is = new LimitedInputStream(fis, contentLength);
                                         headers.put("Content-Range", "bytes " + start + "-" + end + "/" + totalLength);

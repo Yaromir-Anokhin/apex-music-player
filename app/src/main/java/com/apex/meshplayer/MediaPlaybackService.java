@@ -18,8 +18,11 @@ import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.PowerManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -523,29 +526,38 @@ public class MediaPlaybackService extends Service {
     private void loadCoverBitmapAsync(String coverUrl, Runnable onDone) {
         if (coverUrl == null || coverUrl.isEmpty()) {
             mCoverBitmap = null;
-            if (onDone != null) onDone.run();
+            if (onDone != null) new Handler(Looper.getMainLooper()).post(onDone);
             return;
         }
 
         new Thread(() -> {
             Bitmap bmp = null;
             try {
-                String path = coverUrl;
-                if (path.contains("?")) path = path.substring(0, path.indexOf('?'));
-                if (path.startsWith("local-audio://")) path = path.substring("local-audio://".length());
-                if (path.startsWith("file://")) path = path.substring("file://".length());
-                path = Uri.decode(path);
+                if (coverUrl.startsWith("data:image/") && coverUrl.contains(";base64,")) {
+                    int comma = coverUrl.indexOf(',');
+                    if (comma != -1) {
+                        String b64 = coverUrl.substring(comma + 1);
+                        byte[] decoded = Base64.decode(b64, Base64.DEFAULT);
+                        bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
+                    }
+                } else {
+                    String path = coverUrl;
+                    if (path.contains("?")) path = path.substring(0, path.indexOf('?'));
+                    if (path.startsWith("local-audio://")) path = path.substring("local-audio://".length());
+                    if (path.startsWith("file://")) path = path.substring("file://".length());
+                    path = Uri.decode(path);
 
-                File f = new File(path);
-                if (f.exists() && f.canRead()) {
-                    bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
-                } else if (coverUrl.startsWith("http://") || coverUrl.startsWith("https://")) {
-                    URL u = new URL(coverUrl);
-                    HttpURLConnection conn = (HttpURLConnection) u.openConnection();
-                    conn.setConnectTimeout(4000);
-                    conn.setReadTimeout(4000);
-                    try (InputStream is = conn.getInputStream()) {
-                        bmp = BitmapFactory.decodeStream(is);
+                    File f = new File(path);
+                    if (f.exists() && f.canRead()) {
+                        bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
+                    } else if (coverUrl.startsWith("http://") || coverUrl.startsWith("https://")) {
+                        URL u = new URL(coverUrl);
+                        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+                        conn.setConnectTimeout(4000);
+                        conn.setReadTimeout(4000);
+                        try (InputStream is = conn.getInputStream()) {
+                            bmp = BitmapFactory.decodeStream(is);
+                        }
                     }
                 }
                 if (bmp != null) {
@@ -565,10 +577,7 @@ public class MediaPlaybackService extends Service {
             final Bitmap finalBmp = bmp;
             mCoverBitmap = finalBmp;
             if (onDone != null) {
-                try {
-                    mNotificationManager.notify(NOTIFICATION_ID, buildNotification());
-                    updateMediaSessionMetadata();
-                } catch (Throwable ignored) {}
+                new Handler(Looper.getMainLooper()).post(onDone);
             }
         }).start();
     }

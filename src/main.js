@@ -218,8 +218,22 @@ class ApexMusicPlayer {
         isDownloaded: true
       };
 
+      // Preserve current track reference before any mutations
+      const currentTrackBefore = (this.currentIndex >= 0 && this.currentIndex < this.playlist.length)
+        ? this.playlist[this.currentIndex]
+        : null;
+
       // Remove demo tracks if present
-      this.playlist = this.playlist.filter((t) => !t.isDemo);
+      const hadDemos = this.playlist.some((t) => t.isDemo);
+      if (hadDemos) {
+        this.playlist = this.playlist.filter((t) => !t.isDemo);
+        if (currentTrackBefore && !currentTrackBefore.isDemo) {
+          const newIdx = this.playlist.indexOf(currentTrackBefore);
+          this.currentIndex = newIdx !== -1 ? newIdx : 0;
+        } else {
+          this.currentIndex = 0;
+        }
+      }
 
       // Check if already in playlist
       const existingIdx = this.playlist.findIndex((t) =>
@@ -228,9 +242,16 @@ class ApexMusicPlayer {
       );
 
       if (existingIdx !== -1) {
+        const wasCurrent = this.currentIndex === existingIdx;
         this.playlist[existingIdx] = trackObj;
+        if (wasCurrent && !this.isPlaying) {
+          this.updateCoverArt(trackObj);
+        }
       } else {
         this.playlist.unshift(trackObj);
+        if (this.currentIndex >= 0) {
+          this.currentIndex++;
+        }
       }
 
       this.renderPlaylistUI();
@@ -271,8 +292,12 @@ class ApexMusicPlayer {
 
           const hasOnlyDemos = this.playlist.length === 0 || this.playlist.every((t) => t.isDemo);
           if (hasOnlyDemos) {
-            this.playlist = scannedTracks;
-            this.loadTrack(0, false);
+            if (this.isPlaying) {
+              this.playlist = [...this.playlist, ...scannedTracks];
+            } else {
+              this.playlist = scannedTracks;
+              this.loadTrack(0, false);
+            }
           } else {
             scannedTracks.forEach((st) => {
               const existing = this.playlist.find((t) => (t.path && st.path && t.path === st.path) || t.title === st.title);
@@ -301,6 +326,19 @@ class ApexMusicPlayer {
         console.warn('scanLocalDownloads error:', e);
       }
     }
+  }
+
+  getAudioMimeType(track) {
+    const fmt = ((track && track.format) || '').toLowerCase();
+    const path = ((track && (track.path || track.url)) || '').toLowerCase();
+    if (fmt === 'flac' || path.endsWith('.flac')) return 'audio/flac';
+    if (fmt === 'wav' || path.endsWith('.wav')) return 'audio/wav';
+    if (fmt === 'ogg' || path.endsWith('.ogg') || path.endsWith('.oga')) return 'audio/ogg';
+    if (fmt === 'opus' || path.endsWith('.opus')) return 'audio/opus';
+    if (fmt === 'm4a' || path.endsWith('.m4a') || path.endsWith('.mp4')) return 'audio/mp4';
+    if (fmt === 'aac' || path.endsWith('.aac')) return 'audio/aac';
+    if (fmt === 'webm' || path.endsWith('.webm')) return 'audio/webm';
+    return 'audio/mpeg';
   }
 
   async prepareTrackUrl(track) {
@@ -349,7 +387,7 @@ class ApexMusicPlayer {
           for (let i = 0; i < len; i++) {
             bytes[i] = binStr.charCodeAt(i);
           }
-          const mime = (track.format && track.format.toLowerCase() === 'm4a') ? 'audio/mp4' : 'audio/mpeg';
+          const mime = this.getAudioMimeType(track);
           const blob = new Blob([bytes], { type: mime });
           track.blobUrl = URL.createObjectURL(blob);
           return track.blobUrl;
@@ -443,21 +481,16 @@ class ApexMusicPlayer {
     if (e.data === 1) { // PLAYING
       this.isPlaying = true;
       this.updatePlayStateUI(true);
+      this.syncPlaybackWithNative(true);
       this.startYtProgressTracker();
     } else if (e.data === 2) { // PAUSED
       this.isPlaying = false;
       this.updatePlayStateUI(false);
+      this.syncPlaybackWithNative(false);
       this.stopYtProgressTracker();
     } else if (e.data === 0) { // ENDED
       this.stopYtProgressTracker();
-      if (this.repeatMode === 2) {
-        if (this.ytPlayer && typeof this.ytPlayer.seekTo === 'function') {
-          this.ytPlayer.seekTo(0);
-          this.ytPlayer.playVideo();
-        }
-      } else {
-        this.playNext();
-      }
+      this.handleTrackEnded();
     }
   }
 
@@ -735,8 +768,8 @@ class ApexMusicPlayer {
 
     this.updateFavoriteButton(this.favorites.has(track.id));
 
-    document.querySelectorAll('.track-row').forEach((row, idx) => {
-      row.classList.toggle('active', idx === index);
+    document.querySelectorAll('#track-list .track-row').forEach((row) => {
+      row.classList.toggle('active', row.dataset.trackId === track.id);
     });
 
     this.updateMediaSession(track);
@@ -753,9 +786,14 @@ class ApexMusicPlayer {
         } else {
           this.ytPlayer.cueVideoById(vidId);
         }
+        if (typeof this.ytPlayer.setPlaybackRate === 'function') {
+          try { this.ytPlayer.setPlaybackRate(this.playbackRate || 1.0); } catch (e) {}
+        }
       } else {
         this.pendingYtVideoId = vidId;
       }
+      this.syncPlaybackWithNative(autoPlay);
+      this.saveState();
       this.startYtProgressTracker();
     } else {
       // Pause YouTube player if active
@@ -779,6 +817,7 @@ class ApexMusicPlayer {
 
       this.audio.src = playUrl || '';
       this.audio.loop = this.repeatMode === 2;
+      this.audio.playbackRate = this.playbackRate || 1.0;
 
       this.syncPlaybackWithNative(autoPlay);
       this.saveState();
@@ -799,6 +838,7 @@ class ApexMusicPlayer {
       }
       this.isPlaying = true;
       this.updatePlayStateUI(true);
+      this.syncPlaybackWithNative(true);
       this.startYtProgressTracker();
       return;
     }
@@ -863,6 +903,7 @@ class ApexMusicPlayer {
       }
       this.isPlaying = false;
       this.updatePlayStateUI(false);
+      this.syncPlaybackWithNative(false);
       this.stopYtProgressTracker();
       return;
     }
@@ -897,7 +938,13 @@ class ApexMusicPlayer {
     if (this.playlist.length === 0) return;
     let nextIndex;
     if (this.isShuffle) {
-      nextIndex = Math.floor(Math.random() * this.playlist.length);
+      if (this.playlist.length > 1) {
+        do {
+          nextIndex = Math.floor(Math.random() * this.playlist.length);
+        } while (nextIndex === this.currentIndex);
+      } else {
+        nextIndex = 0;
+      }
     } else {
       nextIndex = (this.currentIndex + 1) % this.playlist.length;
     }
@@ -906,12 +953,47 @@ class ApexMusicPlayer {
 
   playPrev() {
     if (this.playlist.length === 0) return;
-    if (this.audio.currentTime > 3) {
-      this.audio.currentTime = 0;
+    const cur = this.playlist[this.currentIndex];
+    let curTime = 0;
+    if (cur && cur.isYt && !cur.isLocal && !cur.blobUrl && this.ytPlayer && typeof this.ytPlayer.getCurrentTime === 'function') {
+      try { curTime = this.ytPlayer.getCurrentTime() || 0; } catch (e) {}
+    } else if (this.audio) {
+      curTime = this.audio.currentTime || 0;
+    }
+    if (curTime > 3) {
+      this.seekAudio(0);
       return;
     }
     let prevIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length;
     this.loadTrack(prevIndex, true);
+  }
+
+  handleTrackEnded() {
+    if (this.repeatMode === 2) {
+      // Repeat one
+      const cur = this.playlist[this.currentIndex];
+      if (cur && cur.isYt && !cur.isLocal && !cur.blobUrl) {
+        if (this.ytPlayer && typeof this.ytPlayer.seekTo === 'function') {
+          this.ytPlayer.seekTo(0, true);
+          this.ytPlayer.playVideo();
+        }
+      } else {
+        this.audio.currentTime = 0;
+        this.playAudio();
+      }
+      return;
+    }
+
+    // If Repeat is OFF and not shuffle, and we've reached the end of playlist:
+    if (this.repeatMode === 0 && !this.isShuffle && this.currentIndex >= this.playlist.length - 1) {
+      this.isPlaying = false;
+      this.updatePlayStateUI(false);
+      this.syncPlaybackWithNative(false);
+      this.seekAudio(0);
+      return;
+    }
+
+    this.playNext();
   }
 
   updatePlayStateUI(playing) {
@@ -982,7 +1064,7 @@ class ApexMusicPlayer {
       navigator.mediaSession.setActionHandler('previoustrack', () => this.playPrev());
       navigator.mediaSession.setActionHandler('nexttrack', () => this.playNext());
       navigator.mediaSession.setActionHandler('seekto', (details) => {
-        if (details.seekTime) this.audio.currentTime = details.seekTime;
+        if (details.seekTime !== undefined) this.seekAudio(details.seekTime);
       });
     }
 
@@ -996,8 +1078,17 @@ class ApexMusicPlayer {
     const title = track.title || 'Apex Track';
     const artist = track.artist || 'Apex Music';
     const coverUrl = track.cover || '';
-    const posSec = this.audio ? (this.audio.currentTime || 0) : 0;
-    const durSec = this.audio ? (this.audio.duration || 0) : 0;
+    let posSec = 0;
+    let durSec = 0;
+    if (track.isYt && !track.isLocal && !track.blobUrl && this.ytPlayer && typeof this.ytPlayer.getCurrentTime === 'function') {
+      try {
+        posSec = this.ytPlayer.getCurrentTime() || 0;
+        durSec = this.ytPlayer.getDuration() || 0;
+      } catch (e) {}
+    } else if (this.audio) {
+      posSec = this.audio.currentTime || 0;
+      durSec = this.audio.duration || 0;
+    }
 
     if (window.AndroidBridge && typeof window.AndroidBridge.updatePlaybackState === 'function') {
       try {
@@ -1011,7 +1102,12 @@ class ApexMusicPlayer {
   saveState() {
     try {
       const currentTrack = this.playlist[this.currentIndex];
-      const curTime = this.audio ? Math.floor(this.audio.currentTime || 0) : 0;
+      let curTime = 0;
+      if (currentTrack && currentTrack.isYt && !currentTrack.isLocal && !currentTrack.blobUrl && this.ytPlayer && typeof this.ytPlayer.getCurrentTime === 'function') {
+        try { curTime = Math.floor(this.ytPlayer.getCurrentTime() || 0); } catch (e) {}
+      } else if (this.audio) {
+        curTime = Math.floor(this.audio.currentTime || 0);
+      }
       const state = {
         currentIndex: this.currentIndex,
         currentTrackId: currentTrack ? currentTrack.id : null,
@@ -1300,18 +1396,35 @@ class ApexMusicPlayer {
       return;
     }
 
-    // 2. Auto-download in background and auto-play immediately when completed!
-    this.pendingPlayTitle = title;
-    this.showToast('🚀 Loading and preparing track...');
+    // 2. Play immediately via YouTube iframe player
+    const ytTrack = {
+      id: 'yt-' + vidId,
+      videoId: vidId,
+      title: title,
+      artist: artist,
+      format: 'YT STREAM',
+      url: 'https://www.youtube.com/watch?v=' + vidId,
+      cover: this.currentYtResult.thumbnail || `https://i.ytimg.com/vi/${vidId}/hqdefault.jpg`,
+      isYt: true,
+      isLocal: false
+    };
 
-    const loader = document.getElementById('yt-loader');
-    const loaderText = document.getElementById('yt-loader-text');
-    if (loader && loaderText) {
-      loader.classList.remove('hidden');
-      loaderText.textContent = `Downloading high quality: "${title}"...`;
+    let existingYtIdx = this.playlist.findIndex((t) => t.id === ytTrack.id || (t.videoId && t.videoId === vidId));
+    if (existingYtIdx === -1) {
+      this.playlist.unshift(ytTrack);
+      if (this.currentIndex >= 0) this.currentIndex++;
+      existingYtIdx = 0;
+      this.renderPlaylistUI();
     }
 
-    await this.downloadCurrentYtTrack(true);
+    await this.loadTrack(existingYtIdx, true);
+    this.switchTab('view-player');
+    this.showToast('▶ Playing: ' + title);
+
+    // Also download in background if on Android for offline cache
+    if (window.AndroidBridge && typeof window.AndroidBridge.downloadMp3Async === 'function') {
+      this.downloadCurrentYtTrack(true);
+    }
   }
 
   async downloadCurrentYtTrack(isSilent = false) {
@@ -1352,15 +1465,36 @@ class ApexMusicPlayer {
 
   addCurrentYtToPlaylist() {
     if (!this.currentYtResult) return;
+    const vidId = this.currentYtResult.id || this.extractVideoId(this.currentYtResult.url);
     const title = this.currentYtResult.title || 'YouTube Track';
+    const artist = this.currentYtResult.artist || 'YouTube Music';
 
-    if (this.playlist.some((t) => t.title && t.title.toLowerCase() === title.toLowerCase())) {
+    if (this.playlist.some((t) => (t.videoId && t.videoId === vidId) || (t.title && t.title.toLowerCase() === title.toLowerCase()))) {
       this.showToast('Track is already in playlist');
       return;
     }
 
-    this.downloadCurrentYtTrack(true);
-    this.showToast('Track is downloading and will be added automatically');
+    const ytTrack = {
+      id: 'yt-' + vidId,
+      videoId: vidId,
+      title: title,
+      artist: artist,
+      format: 'YT STREAM',
+      url: 'https://www.youtube.com/watch?v=' + vidId,
+      cover: this.currentYtResult.thumbnail || `https://i.ytimg.com/vi/${vidId}/hqdefault.jpg`,
+      isYt: true,
+      isLocal: false
+    };
+
+    this.playlist.unshift(ytTrack);
+    if (this.currentIndex >= 0) this.currentIndex++;
+    this.renderPlaylistUI();
+    this.saveState();
+    this.showToast('Added to playlist: ' + title);
+
+    if (window.AndroidBridge && typeof window.AndroidBridge.downloadMp3Async === 'function') {
+      this.downloadCurrentYtTrack(true);
+    }
   }
 
 
@@ -1632,6 +1766,8 @@ class ApexMusicPlayer {
 
       const row = document.createElement('div');
       row.className = `track-row ${isCur ? 'active' : ''}`;
+      row.dataset.trackId = track.id;
+      row.dataset.originalIndex = originalIdx;
 
       row.innerHTML = `
         ${this.coverThumbHtml(track.cover, isCur && this.isPlaying ? '▶' : originalIdx + 1)}
@@ -1682,6 +1818,9 @@ class ApexMusicPlayer {
     this.playbackRate = nextSpeed;
     if (this.audio) {
       try { this.audio.playbackRate = this.playbackRate; } catch (e) {}
+    }
+    if (this.ytPlayer && typeof this.ytPlayer.setPlaybackRate === 'function') {
+      try { this.ytPlayer.setPlaybackRate(this.playbackRate); } catch (e) {}
     }
     const speedBadge = document.getElementById('speed-badge');
     if (speedBadge) speedBadge.textContent = `${this.playbackRate}x`;
@@ -1938,16 +2077,7 @@ class ApexMusicPlayer {
   toggleFavorite() {
     const track = this.playlist[this.currentIndex];
     if (!track) return;
-    if (this.favorites.has(track.id)) {
-      this.favorites.delete(track.id);
-      this.updateFavoriteButton(false);
-      this.showToast('Removed from favorites');
-    } else {
-      this.favorites.add(track.id);
-      this.updateFavoriteButton(true);
-      this.showToast('Added to favorites ❤️');
-    }
-    this.saveFavoritesToStorage();
+    this.toggleFavoriteTrack(track);
   }
 
   saveFavoritesToStorage() {
@@ -2189,12 +2319,7 @@ class ApexMusicPlayer {
     });
 
     this.audio.addEventListener('ended', () => {
-      if (this.repeatMode === 2) {
-        this.audio.currentTime = 0;
-        this.playAudio();
-      } else {
-        this.playNext();
-      }
+      this.handleTrackEnded();
     });
 
     // Navigation Tabs
